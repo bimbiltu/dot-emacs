@@ -80,6 +80,7 @@
 
 (when (and (eq system-type 'windows-nt) (file-executable-p gitbash-shell))
   (add-to-list 'exec-path "C:/Program Files/Git/usr/bin")
+  (add-to-list 'exec-path "C:/Program Files/Git/bin")
   (setenv "SHELL" gitbash-shell)
   ;; This is used in `shell-command-to-string` which is used by things like counsel-file-jump
   ;; (shell-command-to-string (concat find-program " " counsel-file-jump-args)))
