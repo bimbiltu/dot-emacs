@@ -293,7 +293,7 @@ yarn.lock files."
   (forge-pull-notifications nil)
   :config
   ;; '(git hostname, api endpont, id typically hostname, repo class ex forge-github-repository)
-  (add-to-list 'forge-alist private-forge-alist))
+  (when (boundp private-forge-alist) (add-to-list 'forge-alist private-forge-alist))
 
 (use-package git-timemachine
   :ensure t
