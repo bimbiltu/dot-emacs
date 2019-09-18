@@ -44,6 +44,10 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 ;;(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 ;;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+;; workaround for bug in some versions of emacs
+;; https://www.reddit.com/r/emacs/comments/cdei4p/failed_to_download_gnu_archive_bad_request/
+;; https://www.reddit.com/r/emacs/comments/cdf48c/failed_to_download_gnu_archive/
+(when (version< emacs-version "26.2") (setq gnutls-algorithm-priority "normal:-VERS-TLS1.3"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
