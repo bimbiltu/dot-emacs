@@ -38,7 +38,7 @@
 ;; Setup package managers ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/.emacs.d/elisp/")
-(load "~/.emacs.d/secrets.el")
+(when (file-readable-p "~/.emacs.d/secrets.el") (load "~/.emacs.d/secrets.el"))
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
