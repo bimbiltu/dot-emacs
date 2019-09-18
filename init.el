@@ -223,7 +223,9 @@ yarn.lock files."
   :ensure t
   :diminish "proj"
   :bind-keymap
-  ("C-c p" . projectile-command-map))
+  ("C-c p" . projectile-command-map)
+  :custom
+  (projectile-use-git-grep t))
 
 (use-package counsel-projectile
   :ensure t
