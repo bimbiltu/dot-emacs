@@ -23,7 +23,6 @@
 ;; ;; UI configuration ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-theme 'tango-dark)
-(tool-bar-mode -1)
 ;; macOS menu bar doesnt take up extra space
 (when (and (fboundp 'menu-bar-mode) (not (memq window-system '(mac ns))))
   (menu-bar-mode -1))
