@@ -47,7 +47,8 @@
 ;; workaround for bug in some versions of emacs
 ;; https://www.reddit.com/r/emacs/comments/cdei4p/failed_to_download_gnu_archive_bad_request/
 ;; https://www.reddit.com/r/emacs/comments/cdf48c/failed_to_download_gnu_archive/
-(when (version< emacs-version "26.2") (setq gnutls-algorithm-priority "normal:-VERS-TLS1.3"))
+;;This seems to be breaking forge connecting to some private github instances
+;;(when (version< emacs-version "26.2") (setq gnutls-algorithm-priority "normal:-VERS-TLS1.3"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
