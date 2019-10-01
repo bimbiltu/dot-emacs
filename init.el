@@ -470,8 +470,11 @@ yarn.lock files."
   :custom
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
-  ;; dont use tide with language servers
-  :hook ((typescript-mode . (lambda() (unless (assoc 'lsp-mode minor-mode-alist) (setup-tide-mode)))))
+  :hook ((typescript-mode . (lambda()
+                              (when (and
+                                     (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
+                                     (string-match "\\.ts\\'" buffer-file-name))
+                                (setup-tide-mode)))))
   :bind ("C-c C-d" . 'tide-documentation-at-point))
 
 (use-package web-mode
