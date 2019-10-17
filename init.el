@@ -410,16 +410,7 @@ yarn.lock files."
 
 (use-package vue-mode
   :ensure t
-  :mode "\\.vue\\'"
-  ;;:defines (mmm-js-mode-enter-hook mmm-js-mode-exit-hook
-  ;;          mmm-typescript-mode-enter-hook mmm-typescript-mode-exit-hook)
-  :config
-  ;; these dont work the greatest, the language server is better
-  ;(setq mmm-js-mode-enter-hook (lambda() (tern-mode)(company-mode)))
-  ;(setq mmm-js-mode-exit-hook (lambda() (tern-mode -1)(company-mode -1)))
-  ;(setq mmm-typescript-mode-enter-hook #'setup-tide-for-vue)
-  ;(setq mmm-typescript-mode-exit-hook #'teardown-tide-for-vue)
-  )
+  :mode "\\.vue\\'")
 
 (use-package js2-mode
   :ensure t
