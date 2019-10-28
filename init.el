@@ -226,7 +226,8 @@ yarn.lock files."
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :custom
-  (projectile-use-git-grep t))
+  (projectile-use-git-grep t)
+  (projectile-completion-system 'ivy))
 
 (use-package counsel-projectile
   :ensure t
