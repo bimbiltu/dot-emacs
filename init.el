@@ -149,7 +149,10 @@
 (defun delete-trailing-whitespace-except-md ()
   "Call `delete-trailing-whitespace` except when in `markdown-mode`."
   (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
-(add-hook 'before-save-hook #'delete-trailing-whitespace-except-md)
+(add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
+
+(use-package flyspell-mode
+  :hook (markdown-mode . flyspell-mode))
 
 ;; these cause annoying rebuilds with webpack when a dir is being watched
 (setq create-lockfiles nil)
