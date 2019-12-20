@@ -181,6 +181,11 @@
   :init
   (add-hook 'compilation-filter-hook #'color-compilation-output))
 
+;; use colors from PS1 variable in shell-mode
+;; https://stackoverflow.com/questions/25819034/colors-in-emacs-shell-prompt
+(add-hook 'shell-mode-hook
+          (lambda ()
+            (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
