@@ -398,7 +398,10 @@ yarn.lock files."
 (use-package lsp-ui
   :ensure t
   :after lsp-mode
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-show-code-actions nil))
 
 (use-package company-lsp
   :ensure t
@@ -540,8 +543,6 @@ yarn.lock files."
  '(js2-mode-assume-strict t)
  '(js2-strict-inconsistent-return-warning nil)
  '(js2-strict-trailing-comma-warning nil)
- '(lsp-ui-sideline-enable nil)
- '(lsp-ui-sideline-show-code-actions nil)
  '(markdown-command "markdown_py")
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
