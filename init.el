@@ -393,15 +393,18 @@ yarn.lock files."
 
   ;; Can we get company results to filter based on prefix rather than fuzzy?
   ;; I.e. `this.p` should autocomplete to `this.props` but not `this.top`
-  :init (add-hook 'vue-mode-hook #'lsp))
-
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp)
+  :hook ((vue-mode . lsp)))
 
 (use-package lsp-ui
   :ensure t
+  :after lsp-mode
   :commands lsp-ui-mode)
+
+(use-package company-lsp
+  :ensure t
+  :after lsp-mode
+  :commands company-lsp)
+
 
 (use-package eglot
   :ensure nil
