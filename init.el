@@ -480,6 +480,12 @@ yarn.lock files."
   (eldoc-mode -1)
   (tide-mode -1))
 
+(defun is-ts-file ()
+  "Return t if the buffer is for a .ts file."
+  (and
+   (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
+   (string-match "\\.ts\\'" buffer-file-name)))
+
 (use-package tide
   :ensure t
   :after (typescript-mode)
@@ -487,11 +493,9 @@ yarn.lock files."
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
   :hook ((typescript-mode . (lambda()
-                              (when (and
-                                     (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
-                                     (string-match "\\.ts\\'" buffer-file-name))
-                                (setup-tide-mode)))))
-  :bind ("C-c C-d" . 'tide-documentation-at-point))
+                              (when (is-ts-file) (setup-tide-mode)))))
+  :config
+  (when (is-ts-file) (bind-key "C-c C-d" 'tide-documentation-at-point)))
 
 (use-package web-mode
   :ensure t
