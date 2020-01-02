@@ -413,6 +413,7 @@ yarn.lock files."
 
 (use-package eglot
   :ensure nil
+  :if nil
   :commands eglot-ensure
   ;; using lsp-mode for now
   ;;:hook (vue-mode . eglot-ensure)
