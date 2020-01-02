@@ -395,27 +395,52 @@ yarn.lock files."
   :after yasnippet
   :commands lsp
   :custom
-  ((lsp-vetur-use-workspace-dependencies t))
+  (lsp-vetur-use-workspace-dependencies t)
   ;; FIXME: needs to be the local node_modules/typescript/lib and not the tsserver binary
   ;;:config (setq lsp-typescript-tsdk (npm-bin-utils-find "tsserver"))
 
   ;; Can we get company results to filter based on prefix rather than fuzzy?
   ;; I.e. `this.p` should autocomplete to `this.props` but not `this.top`
-  :hook ((vue-mode . lsp)))
+  :hook ((vue-mode . lsp)
+         ;; TODO: look into using lsp for these as well
+         ;;(js2-mode . lsp)
+         ;;(typescript-mode . lsp)
+         ))
 
 (use-package lsp-ui
   :ensure t
   :after lsp-mode
   :commands lsp-ui-mode
+  :config
+  ;; FIXME: this is a workaround for https://github.com/emacs-lsp/lsp-mode/issues/1288
+  (lsp-ui-flycheck-add-mode 'typescript-mode)
+  (bind-key "C-c C-d" 'lsp-ui-doc-glance)
   :custom
   (lsp-ui-sideline-enable nil)
-  (lsp-ui-sideline-show-code-actions nil))
+  (lsp-ui-sideline-show-code-actions nil)
+  (lsp-ui-sideline-show-hover nil)
+
+  (lsp-prefer-flymake nil)
+  (lsp-ui-flycheck-enable t)
+
+  ;; dont automatically show docs, instead bind lsp-ui-doc-glance
+  (lsp-ui-doc-enable nil)
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-include-signature nil) ;; have eldoc display signatures
+
+  ;; FIXME: I want to use my own flycheck config for frequency, but this doesnt seem to display errors when first
+  ;; launching emacs and opening a file. Not sure if this is because of the above issue or not.
+  (lsp-ui-flycheck-live-reporting t))
 
 (use-package company-lsp
   :ensure t
   :after lsp-mode
   :commands company-lsp)
 
+;; TODO: get this set up
+(use-package dap-mode
+  :after lsp-mode
+  :ensure nil)
 
 (use-package eglot
   :ensure nil
