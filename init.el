@@ -357,7 +357,7 @@ yarn.lock files."
 ;; This or flycheck-pos-tip?
 (use-package flycheck-popup-tip
   :ensure t
-  :if t
+  :if nil
   :commands flycheck-popup-tip-mode
   :after flycheck
   :hook ((flycheck-mode . flycheck-popup-tip-mode))
