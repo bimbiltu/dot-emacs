@@ -343,7 +343,6 @@ yarn.lock files."
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
   :config
-  (global-flycheck-mode)
   (defun magnars/adjust-flycheck-automatic-syntax-eagerness ()
     "Adjust how often we check for errors based on if there are any.
   This lets us fix any errors as quickly as possible, but in a
@@ -356,7 +355,10 @@ yarn.lock files."
   (make-variable-buffer-local 'flycheck-idle-change-delay)
 
   (add-hook 'flycheck-after-syntax-check-hook
-            'magnars/adjust-flycheck-automatic-syntax-eagerness))
+            'magnars/adjust-flycheck-automatic-syntax-eagerness)
+
+  (global-flycheck-mode))
+
 
 ;; This or flycheck-pos-tip?
 (use-package flycheck-popup-tip
