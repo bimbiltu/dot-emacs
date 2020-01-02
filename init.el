@@ -357,8 +357,10 @@ yarn.lock files."
 ;; This or flycheck-pos-tip?
 (use-package flycheck-popup-tip
   :ensure t
+  :if t
+  :commands flycheck-popup-tip-mode
   :after flycheck
-  :defer
+  :hook ((flycheck-mode . flycheck-popup-tip-mode))
   :custom (flycheck-popup-tip-error-prefix "\u2718 "))
 
 (use-package prettier-js
