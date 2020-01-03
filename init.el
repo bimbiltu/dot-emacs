@@ -90,7 +90,7 @@
 ;; set $PATH according to my shell (including .profile) when launching GUI emacs
 ;; This doesn't seem necessary on my linux mint system but can add 'x to the list
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  :if (memq window-system '(mac ns x))
   :ensure t
   :config
   (exec-path-from-shell-initialize))
