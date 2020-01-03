@@ -253,6 +253,7 @@ yarn.lock files."
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
   :config
+  ;;(define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
   (ivy-mode 1))
 
 (use-package counsel
