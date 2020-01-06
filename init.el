@@ -246,7 +246,6 @@ yarn.lock files."
 
 (use-package ivy
   :ensure t
-  :pin gnu
   :custom
   (ivy-height 15)
   ;; makes recent files appear when showing buffer list
