@@ -403,6 +403,9 @@ yarn.lock files."
 
   ;; Can we get company results to filter based on prefix rather than fuzzy?
   ;; I.e. `this.p` should autocomplete to `this.props` but not `this.top`
+
+  :config
+  (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   :hook ((vue-mode . lsp)
          ;; TODO: look into using lsp for these as well
          ;;(js2-mode . lsp)
@@ -416,7 +419,7 @@ yarn.lock files."
   :config
   ;; FIXME: this is a workaround for https://github.com/emacs-lsp/lsp-mode/issues/1288
   (lsp-ui-flycheck-add-mode 'typescript-mode)
-  (bind-key "C-c C-d" 'lsp-ui-doc-glance)
+  (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
   :custom
   (lsp-ui-sideline-enable nil)
   (lsp-ui-sideline-show-code-actions nil)
@@ -520,10 +523,14 @@ yarn.lock files."
   :custom
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
+  ;; dont activate tide on vue files
   :hook ((typescript-mode . (lambda()
                               (when (is-ts-file) (setup-tide-mode)))))
   :config
-  (when (is-ts-file) (bind-key "C-c C-d" 'tide-documentation-at-point)))
+  ;; Dont interfere with LSP keybindings for vue files with ts scripts
+  (when (is-ts-file) (progn
+                       (bind-key "C-c C-d" 'tide-documentation-at-point tide-mode-map)
+                       (bind-key "C-c C-f" 'tide-fix tide-mode-map))))
 
 (use-package web-mode
   :ensure t
