@@ -418,7 +418,7 @@ yarn.lock files."
   :commands lsp-ui-mode
   :config
   ;; FIXME: this is a workaround for https://github.com/emacs-lsp/lsp-mode/issues/1288
-  (lsp-ui-flycheck-add-mode 'typescript-mode)
+  (mapc 'lsp-ui-flycheck-add-mode '(typescript-mode js-mode css-mode vue-html-mode))
   (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
   :custom
   (lsp-ui-sideline-enable nil)
