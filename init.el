@@ -398,7 +398,7 @@ yarn.lock files."
   :commands lsp
   :custom
   (lsp-vetur-use-workspace-dependencies t)
-  ;; FIXME: needs to be the local node_modules/typescript/lib and not the tsserver binary
+  ;; FIXME: should be the local node_modules/typescript/lib and not the tsserver binary
   ;;:config (setq lsp-typescript-tsdk (npm-bin-utils-find "tsserver"))
 
   ;; Can we get company results to filter based on prefix rather than fuzzy?
