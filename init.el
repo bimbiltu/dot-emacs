@@ -441,6 +441,7 @@ yarn.lock files."
 
 ;; TODO: get this set up
 (use-package dap-mode
+  :if nil
   :after lsp-mode
   :ensure nil)
 
