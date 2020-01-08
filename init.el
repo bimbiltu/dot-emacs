@@ -260,6 +260,8 @@ yarn.lock files."
   :ensure t
   :after ivy
   :diminish
+  :custom
+  (counsel-find-file-at-point t)
   :config (counsel-mode 1))
 
 (use-package recentf
