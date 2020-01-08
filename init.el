@@ -409,6 +409,7 @@ yarn.lock files."
          ;; TODO: look into using lsp for these as well
          ;;(js2-mode . lsp)
          ;;(typescript-mode . lsp)
+         ;;(json-mode . lsp)
          ))
 
 (use-package lsp-ui
