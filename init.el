@@ -422,8 +422,6 @@ yarn.lock files."
   (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
   :custom
   (lsp-ui-sideline-enable nil)
-  (lsp-ui-sideline-show-code-actions nil)
-  (lsp-ui-sideline-show-hover nil)
 
   (lsp-prefer-flymake nil)
   (lsp-ui-flycheck-enable t)
