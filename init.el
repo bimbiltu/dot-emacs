@@ -279,8 +279,8 @@ yarn.lock files."
 
 ;; disabled for now
 (use-package dashboard
-  :ensure nil
-  :if nil
+  :ensure t
+  :disabled
   :config
   (dashboard-setup-startup-hook)
   :custom
@@ -364,7 +364,7 @@ yarn.lock files."
 ;; This or flycheck-pos-tip?
 (use-package flycheck-popup-tip
   :ensure t
-  :if nil
+  :disabled
   :commands flycheck-popup-tip-mode
   :after flycheck
   :hook ((flycheck-mode . flycheck-popup-tip-mode))
@@ -443,13 +443,13 @@ yarn.lock files."
 
 ;; TODO: get this set up
 (use-package dap-mode
-  :if nil
-  :after lsp-mode
-  :ensure nil)
+  :disabled
+  :ensure t
+  :after lsp-mode)
 
 (use-package eglot
-  :ensure nil
-  :if nil
+  :disabled
+  :ensure t
   :commands eglot-ensure
   ;; using lsp-mode for now
   ;;:hook (vue-mode . eglot-ensure)
