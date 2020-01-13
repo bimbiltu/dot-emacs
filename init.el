@@ -390,12 +390,13 @@ yarn.lock files."
   :hook ((tern-mode typescript-mode) . company-mode))
 
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :commands yas-minor-mode
+  :hook ((lsp-mode . yas-minor-mode)))
 
 ;;; Language servers
 (use-package lsp-mode
   :ensure t
-  :after yasnippet
   :commands lsp
   :custom
   (lsp-vetur-use-workspace-dependencies t)
