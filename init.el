@@ -139,7 +139,6 @@
 (global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
 (global-set-key (kbd "C-c C-c") 'compile)
 ;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
-;;(global-set-key (kbd "C-u") 'undo) ;; i need to break this habit..
 
 ;; TODO: Look into ws-butler instead
 (defun delete-trailing-whitespace-except-md ()
