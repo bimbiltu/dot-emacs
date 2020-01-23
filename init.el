@@ -65,6 +65,14 @@
 (defconst homebrew-shell "/usr/local/bin/bash")
 (defconst gitbash-shell "C:\\Program Files\\Git\\bin\\bash.exe")
 
+;; set $PATH according to my shell (including .profile) when launching GUI emacs
+;; This doesn't seem necessary on my linux mint system but can add 'x to the list
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
 (when (eq system-type 'darwin)
   ;; FIXME: this doesn't work on GUI mac as gls isnt available until after exec-path-from-shell
   (let* ((gls-exec (executable-find "gls")))
@@ -81,14 +89,6 @@
   ;; This is used in `shell-command-to-string` which is used by things like counsel-file-jump
   ;; (shell-command-to-string (concat find-program " " counsel-file-jump-args)))
   (setq shell-file-name gitbash-shell))
-
-;; set $PATH according to my shell (including .profile) when launching GUI emacs
-;; This doesn't seem necessary on my linux mint system but can add 'x to the list
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
