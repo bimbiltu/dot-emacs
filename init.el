@@ -318,6 +318,9 @@ yarn.lock files."
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Programming Basics ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
+;; We have a lot of .ts files with a node shebang in them, so just blanket deactivate js-mode activating from a shebang
+(setq interpreter-mode-alist (rassq-delete-all 'js-mode interpreter-mode-alist))
+
 (use-package npm-bin-utils
   :commands (npm-bin-utils-add-to-path npm-bin-utils-find))
 
