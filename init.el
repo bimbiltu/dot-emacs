@@ -492,29 +492,27 @@ yarn.lock files."
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'")
 
-(defun setup-tide-mode ()
-  "Setup tide."
-  (tide-setup)
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
-
-(defun teardown-tide-mode ()
-  "Teardown tide."
-  (company-mode -1)
-  (tide-hl-identifier-mode -1)
-  (eldoc-mode -1)
-  (tide-mode -1))
-
-(defun is-ts-file ()
-  "Return t if the buffer is for a .ts file."
-  (and
-   (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
-   (string-match "\\.ts\\'" buffer-file-name)))
-
 (use-package tide
   :ensure t
   :after (typescript-mode)
+  :preface
+  (defun setup-tide-mode ()
+    "Setup tide."
+    (tide-setup)
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    (company-mode +1))
+  (defun teardown-tide-mode ()
+    "Teardown tide."
+    (company-mode -1)
+    (tide-hl-identifier-mode -1)
+    (eldoc-mode -1)
+    (tide-mode -1))
+  (defun is-ts-file ()
+    "Return t if the buffer is for a .ts file."
+    (and
+     (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
+     (string-match "\\.ts\\'" buffer-file-name)))
   :custom
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
