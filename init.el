@@ -74,7 +74,6 @@
   (exec-path-from-shell-initialize))
 
 (when (eq system-type 'darwin)
-  ;; FIXME: this doesn't work on GUI mac as gls isnt available until after exec-path-from-shell
   (let* ((gls-exec (executable-find "gls")))
     (when gls-exec (setq insert-directory-program gls-exec)))
 
