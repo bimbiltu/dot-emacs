@@ -140,8 +140,11 @@
 ;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
 
 ;; TODO: Look into ws-butler instead
-(add-hook 'before-save-hook
-          (lambda() (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace))))
+(defun delete-trailing-whitespace-except-md ()
+  "Call `delete-trailing-whitespace` except when in `markdown-mode`."
+  ;; use whitespace-cleanup instead?
+  (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
+(add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
 
 (use-package flyspell-mode
   :hook (markdown-mode . flyspell-mode))
