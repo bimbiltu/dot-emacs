@@ -361,6 +361,9 @@ yarn.lock files."
   (add-hook 'flycheck-after-syntax-check-hook
             'magnars/adjust-flycheck-automatic-syntax-eagerness)
 
+  (add-hook 'prog-mode-hook (lambda ()
+                              (when (> (buffer-size) (* 750 1000)) (flycheck-mode -1))))
+
   (global-flycheck-mode))
 
 
