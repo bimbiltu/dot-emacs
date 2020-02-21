@@ -338,6 +338,13 @@ yarn.lock files."
   (flycheck-idle-change-delay 3)
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
+  :init
+  (defun disable-flycheck-on-large-buffers ()
+    (message "disable")
+    (when (> (buffer-size) large-buffer) (flycheck-mode -1)))
+  ;; why does this need to be in init? seems to give infinite recursion in :config
+  (add-hook 'prog-mode-hook 'disable-flycheck-on-large-buffers)
+
   :config
   (add-hook 'flycheck-mode-hook #'npm-bin-utils-add-to-path)
   ;; (dolist (where '((emacs-lisp-mode-hook . emacs-lisp-mode-map)
@@ -363,9 +370,6 @@ yarn.lock files."
 
   (add-hook 'flycheck-after-syntax-check-hook
             'magnars/adjust-flycheck-automatic-syntax-eagerness)
-
-  (add-hook 'prog-mode-hook (lambda ()
-                              (when (> (buffer-size) large-buffer) (flycheck-mode -1))))
 
   (global-flycheck-mode))
 
