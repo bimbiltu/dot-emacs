@@ -93,6 +93,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; core emacs config ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
+;; disable some features on large buffers like webpack bundles
+(defconst large-buffer (* 450 1000))
+
 (use-package winner
   :defer 2
   :config (winner-mode))
@@ -362,7 +365,7 @@ yarn.lock files."
             'magnars/adjust-flycheck-automatic-syntax-eagerness)
 
   (add-hook 'prog-mode-hook (lambda ()
-                              (when (> (buffer-size) (* 750 1000)) (flycheck-mode -1))))
+                              (when (> (buffer-size) large-buffer) (flycheck-mode -1))))
 
   (global-flycheck-mode))
 
@@ -567,7 +570,7 @@ yarn.lock files."
 ;; disable font-lock in really large buffers like webpack bundles
 (add-hook 'prog-mode-hook (lambda ()
                             ;;(> (line-number-at-pos (point-max)) 5000))
-                            (when (> (buffer-size) (* 750 1000))
+                            (when (> (buffer-size) large-buffer)
                               (linum-mode -1)
                               (font-lock-mode -1))))
 
