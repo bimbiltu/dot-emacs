@@ -336,7 +336,9 @@ yarn.lock files."
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
   (flycheck-global-modes (quote (not vue-mode)))
   (flycheck-idle-change-delay 3)
-  :init
+  :bind (("M-n" . flycheck-next-error)
+         ("M-p" . flycheck-previous-error))
+  :config
   (add-hook 'flycheck-mode-hook #'npm-bin-utils-add-to-path)
   ;; (dolist (where '((emacs-lisp-mode-hook . emacs-lisp-mode-map)
   ;;                  (js2-mode-hook        . js2-mode-map)
@@ -347,9 +349,7 @@ yarn.lock files."
   ;;             `(lambda ()
   ;;                (bind-key "M-n" #'flycheck-next-error ,(cdr where))
   ;;                (bind-key "M-p" #'flycheck-previous-error ,(cdr where)))))
-  :bind (("M-n" . flycheck-next-error)
-         ("M-p" . flycheck-previous-error))
-  :config
+
   (defun magnars/adjust-flycheck-automatic-syntax-eagerness ()
     "Adjust how often we check for errors based on if there are any.
   This lets us fix any errors as quickly as possible, but in a
