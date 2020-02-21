@@ -94,6 +94,7 @@
 ;; core emacs config ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 (use-package winner
+  :defer 2
   :config (winner-mode))
 (use-package windmove
   :bind
@@ -139,7 +140,6 @@
 (global-set-key (kbd "C-c C-c") 'compile)
 ;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
 
-;; TODO: Look into ws-butler instead
 (defun delete-trailing-whitespace-except-md ()
   "Call `delete-trailing-whitespace` except when in `markdown-mode`."
   ;; use whitespace-cleanup instead?
@@ -221,7 +221,10 @@ yarn.lock files."
   :defer t)
 (use-package iedit
   :ensure t
-  :defer t)
+  :commands (iedit-mode-from-isearch)
+  :bind
+  (("C-;" . iedit-mode)
+   ("C-h C-;" . iedit-mode-toggle-on-function)))
 
 (use-package projectile
   :ensure t
@@ -256,10 +259,11 @@ yarn.lock files."
   :diminish
   :custom
   (counsel-find-file-at-point t)
+  ;;:bind ("M-x" . counsel-M-x)
   :config (counsel-mode 1))
 
 (use-package recentf
-  :defer nil
+  :defer 2
   :custom
   (recentf-max-saved-items 100)
   (recentf-max-menu-items 15)
@@ -269,6 +273,7 @@ yarn.lock files."
 
 (use-package ace-jump-mode
   :ensure t
+  :commands (ace-jump-line-mode ace-jump-word-mode ace-jump-char-mode)
   :bind
   (("C-c SPC" . ace-jump-mode)
    ("C-x SPC" . ace-jump-mode-pop-mark)))
@@ -305,7 +310,6 @@ yarn.lock files."
 
 (use-package git-timemachine
   :ensure t
-  :defer
   :commands git-timemachine)
 
 
@@ -322,8 +326,8 @@ yarn.lock files."
 ;; a lot of this is copied from https://github.com/jwiegley/dot-emacs/blob/master/init.el
 (use-package flycheck
   :ensure t
-  :commands (flycheck-mode global-flycheck-mode flycheck-next-error flycheck-previous-error)
-  :defer 3
+  :commands (flycheck-mode global-flycheck-mode flycheck-next-error flycheck-previous-error flycheck-add-next-checker)
+  :defer 2
   :custom
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
@@ -478,7 +482,6 @@ yarn.lock files."
 (use-package tern
   :ensure t
   :if (executable-find "tern")
-  :defer
   ;; :config
   ;; (tern-command (append tern-command '("--no-port-file"))))
   :hook (js2-mode . tern-mode))
@@ -519,10 +522,14 @@ yarn.lock files."
   :custom
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
+
   ;; dont activate tide on vue files
   :hook ((typescript-mode . (lambda()
                               (when (is-ts-file) (setup-tide-mode)))))
   :config
+  ;; We currently do not eslint on ts files
+  ;; https://github.com/ananthakumaran/tide/issues/308
+  ;; (flycheck-add-next-checker 'typescript-tide '(warning . javascript-eslint))
   ;; Dont interfere with LSP keybindings for vue files with ts scripts
   (when (is-ts-file) (progn
                        (bind-key "C-c C-d" 'tide-documentation-at-point tide-mode-map)
