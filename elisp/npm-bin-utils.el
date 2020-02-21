@@ -94,7 +94,8 @@ binaries will resolve with the typical node resolution strategy.  This is
 especially useful for monorepos where binaries like `eslint` may be at the top
 of the monorepo if you are using a build like vue-cli.
 
-Note that this function adds absolute paths to the end of `exec-path`."
+Note that this function adds absolute paths to the end of `exec-path` and also
+makes the variable buffer local."
   (make-local-variable 'exec-path)
   (defun add-to-exec (path) (progn
                               (add-to-list 'exec-path path t)
