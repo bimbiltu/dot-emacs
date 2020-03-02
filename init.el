@@ -494,7 +494,7 @@ yarn.lock files."
   :if (executable-find "tern")
   ;; :config
   ;; (tern-command (append tern-command '("--no-port-file"))))
-  :hook (js2-mode . tern-mode))
+  :hook (js2-mode . (lambda () (unless (> (buffer-size) large-buffer) (tern-mode)))))
 
 (use-package company-tern
   :ensure t
