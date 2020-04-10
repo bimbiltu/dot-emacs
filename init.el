@@ -403,6 +403,8 @@ yarn.lock files."
   ;; :config
   ;; (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
   :custom
+  ;; preserve casing of "dumb" completions
+  (company-dabbrev-downcase nil)
   (company-tooltip-align-annotations t)
   (company-show-numbers t)
   (company-idle-delay 0.10)
