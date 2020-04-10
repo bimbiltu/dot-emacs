@@ -474,6 +474,9 @@ yarn.lock files."
   :ensure t
   :mode "\\.scss\\'")
 
+(use-package vue-html-mode
+  :custom (vue-html-extra-indent 2))
+
 (use-package vue-mode
   :ensure t
   :mode "\\.vue\\'")
