@@ -267,8 +267,8 @@ yarn.lock files."
 (use-package recentf
   :defer 2
   :custom
-  (recentf-max-saved-items 100)
-  (recentf-max-menu-items 15)
+  (recentf-max-saved-items 200)
+  (recentf-max-menu-items 0)
   :config
   (recentf-mode +1)
   :bind ("C-x C-r" . counsel-recentf))
