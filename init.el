@@ -187,7 +187,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure file backups and autosave ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun disable-backup-for-cache (file)
+(defun my-backup-enable-p (file)
   "Return t if FILE is part of a blacklist or passes the normal predicate test.
 Otherwise, return nil.  The main purpose of this function is to not backup
 yarn.lock files."
@@ -209,7 +209,7 @@ yarn.lock files."
    kept-old-versions 0
    version-control t
    vc-make-backup-files t ;; backup files that are version controlled
-   backup-enable-predicate #'disable-backup-for-cache
+   backup-enable-predicate 'my-backup-enable-p
    auto-save-interval 200
    auto-save-timeout 10)
 (add-hook 'before-save-hook #'force-backup-of-buffer)
