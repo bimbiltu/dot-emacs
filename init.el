@@ -191,7 +191,8 @@
   "Return t if FILE is part of a blacklist or passes the normal predicate test.
 Otherwise, return nil.  The main purpose of this function is to not backup
 yarn.lock files."
-  (unless (member (file-name-nondirectory file) '("yarn.lock"))
+  (unless (or (member (file-name-nondirectory file) '("yarn.lock" "package-lock.json"))
+              (> (buffer-size) large-buffer))
        (normal-backup-enable-predicate file)))
 
 ;; possible alternative: https://www.emacswiki.org/emacs/backup-each-save.el
