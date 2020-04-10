@@ -402,6 +402,8 @@ yarn.lock files."
   :diminish "co."
   ;; :config
   ;; (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+  :bind
+  ("C-c ." . company-complete)
   :custom
   ;; preserve casing of "dumb" completions
   (company-dabbrev-downcase nil)
