@@ -163,6 +163,7 @@
 ;; https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "M-Z") 'zap-to-char)
 (use-package uniquify
   :custom (uniquify-buffer-name-style 'forward))
 
