@@ -229,6 +229,16 @@ yarn.lock files."
   (("C-;" . iedit-mode)
    ("C-h C-;" . iedit-mode-toggle-on-function)))
 
+(use-package browse-at-remote
+  :ensure t
+  :config
+  ;; from secrets.el
+  ;; can also git config --add browseAtRemote.type "github"
+  (when (boundp 'company-github-url)
+    (push (cons company-github-url "github")
+          browse-at-remote-remote-type-domains))
+  :bind ("C-c B" . browse-at-remote))
+
 (use-package projectile
   :ensure t
   :diminish "proj"
