@@ -120,13 +120,11 @@
 (use-package delsel
   :config (delete-selection-mode))
 (use-package saveplace
-  :unless noninteractive
   :config (save-place-mode 1)
   :custom
   ;; Make exiting emacs fast on NFS
   (save-place-forget-unreadable-files nil))
 (use-package savehist
-  :unless noninteractive
   :config
   (savehist-mode 1))
 (use-package move-lines
