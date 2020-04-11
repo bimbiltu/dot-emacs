@@ -36,15 +36,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup package managers ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path "~/.emacs.d/elisp/")
-(when (file-readable-p "~/.emacs.d/secrets.el") (load "~/.emacs.d/secrets.el"))
+(add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
+(let ((secrets-file (concat user-emacs-directory (file-name-as-directory "secrets"))))
+  (when (file-readable-p secrets-file) (load secrets-file)))
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 ;;(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 ;;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-(package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -612,10 +614,10 @@ yarn.lock files."
  '(fill-column 120)
  '(indent-tabs-mode nil)
  '(js-chain-indent nil)
- '(js-enabled-frameworks (quote (javascript prototype)))
+ '(js-enabled-frameworks '(javascript prototype))
  '(js-indent-level 2)
  '(js2-allow-rhino-new-expr-initializer nil)
- '(js2-concat-multiline-strings (quote eol))
+ '(js2-concat-multiline-strings 'eol)
  '(js2-highlight-external-variables nil)
  '(js2-include-node-externs t)
  '(js2-mode-assume-strict t)
@@ -624,11 +626,10 @@ yarn.lock files."
  '(markdown-command "markdown_py")
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
-   (quote
-    (web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui company-lsp lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
+   '(web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui company-lsp lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
  '(save-place-forget-unreadable-files nil)
  '(tab-width 4)
- '(vue-dedicated-modes (quote (js-mode js2-mode))))
+ '(vue-dedicated-modes '(js-mode js2-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
