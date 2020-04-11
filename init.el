@@ -202,11 +202,11 @@ yarn.lock files."
   "Clear `buffer-backed-up`."
   (setq buffer-backed-up nil))
 
-;; Backup after every save, keep up to 8 backups and store them in ~/.emacs.d/saves
+;; Backup after every save, keep up to 8 backups and store them in <user-emacs-directory>/saves
 ;; Autosave (create #file#) every 200 keystrokes or after idle for 10s
 (setq
    backup-by-copying t ;; don't clobber symlinks
-   backup-directory-alist '(("." . "~/.emacs.d/saves"))
+   backup-directory-alist (list (cons "." (concat user-emacs-directory (file-name-as-directory "saves"))))
    delete-old-versions t ;; automatically delete backups when we have too many
    kept-new-versions 20
    kept-old-versions 0
