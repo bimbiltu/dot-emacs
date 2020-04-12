@@ -128,6 +128,8 @@ lockfiles or large files."
 ;; will be used to some features on large buffers like webpack bundles
 ;; This is not necessarially covered by so-long because those files might not have long lines
 (defconst large-buffer (* 500 1000))
+;; used to track when vue-mode is enabled
+(defvar-local vue-mode-p nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -398,7 +400,6 @@ lockfiles or large files."
   :custom
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
-  (flycheck-global-modes (quote (not vue-mode)))
   (flycheck-idle-change-delay 3)
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
@@ -499,7 +500,14 @@ lockfiles or large files."
   :commands lsp-ui-mode
   :config
   ;; FIXME: this is a workaround for https://github.com/emacs-lsp/lsp-mode/issues/1288
-  (mapc 'lsp-ui-flycheck-add-mode '(typescript-mode js-mode css-mode vue-html-mode))
+  (when vue-mode-p
+    (let* ((lsp-ui-modes '(typescript-mode js-mode css-mode vue-html-mode))
+           (eslint-modes (cons 'vue-mode lsp-ui-modes)))
+
+      (mapc 'lsp-ui-flycheck-add-mode lsp-ui-modes)
+      (mapc (apply-partially 'flycheck-add-mode 'javascript-eslint) eslint-modes)
+      (flycheck-add-next-checker 'lsp 'javascript-eslint)))
+
   (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
   :custom
   (lsp-ui-sideline-enable nil)
@@ -537,7 +545,6 @@ lockfiles or large files."
   :ensure t
   :mode "\\.scss\\'")
 
-(defvar-local vue-mode-p nil)
 (use-package vue-mode
   :ensure t
   :config
