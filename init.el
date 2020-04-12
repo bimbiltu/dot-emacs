@@ -178,6 +178,10 @@ yarn.lock files."
   (show-paren-when-point-inside-paren t)
   (show-paren-when-point-in-periphery t)
   :config (show-paren-mode))
+(use-package goto-addr
+  :hook
+  ((text-mode . goto-address-mode)
+   (prog-mode . goto-address-prog-mode)))
 (use-package delsel
   :config (delete-selection-mode))
 (use-package saveplace
