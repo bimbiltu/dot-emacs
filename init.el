@@ -90,9 +90,41 @@
   (setq shell-file-name gitbash-shell))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; some mode agnostic config ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure file backups and autosave ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun my-backup-enable-p (file)
+  "Return t if FILE is part of a blacklist or passes the normal predicate test.
+Otherwise, return nil.  The main purpose of this function is to not backup
+yarn.lock files."
+  (unless (or (member (file-name-nondirectory file) '("yarn.lock" "package-lock.json"))
+              (> (buffer-size) large-buffer))
+       (normal-backup-enable-predicate file)))
+
+;; alternative: https://www.emacswiki.org/emacs/backup-each-save.el
+(defun force-backup-of-buffer ()
+  "Clear `buffer-backed-up`."
+  (setq buffer-backed-up nil))
+
+;; Backup after every save, keep up to 8 backups and store them in <user-emacs-directory>/saves
+;; Autosave (create #file#) every 200 keystrokes or after idle for 10s
+(setq
+   backup-by-copying t ;; don't clobber symlinks
+   backup-directory-alist (list (cons "." (concat user-emacs-directory (file-name-as-directory "saves"))))
+   delete-old-versions t ;; automatically delete backups when we have too many
+   kept-new-versions 20
+   kept-old-versions 0
+   version-control t
+   vc-make-backup-files t ;; backup files that are version controlled
+   backup-enable-predicate 'my-backup-enable-p
+   auto-save-interval 200
+   auto-save-timeout 10)
+(add-hook 'before-save-hook #'force-backup-of-buffer)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; some programming language agnostic config ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TODO: can I make Ctrl-/ work on macos for undo?
 ;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
 
@@ -100,13 +132,27 @@
 ;; This is not necessarially covered by so-long because those files might not have long lines
 (defconst large-buffer (* 450 1000))
 
+(global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
+(global-set-key (kbd "C-c C-c") 'compile)
+
+;; these cause annoying rebuilds with webpack when a dir is being watched
+(setq create-lockfiles nil)
+;; helps with lsp-mode performance
+(setq read-process-output-max (* 1024 1024))
+
+;; some stuff from better-defaults
+;; https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "M-Z") 'zap-to-char)
+
+
 (when (< emacs-major-version 27)
   (load (concat user-emacs-directory "so-long.el")))
 (use-package so-long
   :custom
   (so-long-threshold 500)
   :config (global-so-long-mode))
-
 (use-package winner
   :defer 2
   :config (winner-mode))
@@ -147,34 +193,19 @@
 (use-package my-functions
   :bind
   ("C-d" . my/duplicate-line))
-
-(global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
-
-;; these cause annoying rebuilds with webpack when a dir is being watched
-(setq create-lockfiles nil)
-
 (use-package keyfreq
   :ensure t
   :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
-
 (use-package hl-todo
   :ensure t
   :config (global-hl-todo-mode))
 (use-package wgrep
   :ensure t
   :defer t)
-
-;; some stuff from better-defaults
-;; https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "M-Z") 'zap-to-char)
 (use-package uniquify
   :custom (uniquify-buffer-name-style 'forward))
-
-(global-set-key (kbd "C-c C-c") 'compile)
 
 ;; https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
 (use-package ansi-color
@@ -192,48 +223,35 @@
           (lambda ()
             (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
 
+;; disabled for now
+(use-package dashboard
+  :ensure t
+  :disabled
+  :config
+  (dashboard-setup-startup-hook)
+  :custom
+  (dashboard-items '((projects . 10)
+                     (recents  . 10)
+                     (bookmarks . 5))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configure file backups and autosave ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun my-backup-enable-p (file)
-  "Return t if FILE is part of a blacklist or passes the normal predicate test.
-Otherwise, return nil.  The main purpose of this function is to not backup
-yarn.lock files."
-  (unless (or (member (file-name-nondirectory file) '("yarn.lock" "package-lock.json"))
-              (> (buffer-size) large-buffer))
-       (normal-backup-enable-predicate file)))
-
-;; alternative: https://www.emacswiki.org/emacs/backup-each-save.el
-(defun force-backup-of-buffer ()
-  "Clear `buffer-backed-up`."
-  (setq buffer-backed-up nil))
-
-;; Backup after every save, keep up to 8 backups and store them in <user-emacs-directory>/saves
-;; Autosave (create #file#) every 200 keystrokes or after idle for 10s
-(setq
-   backup-by-copying t ;; don't clobber symlinks
-   backup-directory-alist (list (cons "." (concat user-emacs-directory (file-name-as-directory "saves"))))
-   delete-old-versions t ;; automatically delete backups when we have too many
-   kept-new-versions 20
-   kept-old-versions 0
-   version-control t
-   vc-make-backup-files t ;; backup files that are version controlled
-   backup-enable-predicate 'my-backup-enable-p
-   auto-save-interval 200
-   auto-save-timeout 10)
-(add-hook 'before-save-hook #'force-backup-of-buffer)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; General Programming Productivity ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package iedit
   :ensure t
   :commands (iedit-mode-from-isearch)
   :bind
   (("C-;" . iedit-mode)
    ("C-h C-;" . iedit-mode-toggle-on-function)))
+
+(use-package ace-jump-mode
+  :ensure t
+  :commands (ace-jump-line-mode ace-jump-word-mode ace-jump-char-mode)
+  :bind
+  (("C-c SPC" . ace-jump-mode)
+   ("C-x SPC" . ace-jump-mode-pop-mark)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; setup counsel, source control ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: remove when https://github.com/magit/forge/issues/91 is resolved
 (use-package browse-at-remote
@@ -292,24 +310,6 @@ yarn.lock files."
   :config
   (recentf-mode +1)
   :bind ("C-x C-r" . counsel-recentf))
-
-(use-package ace-jump-mode
-  :ensure t
-  :commands (ace-jump-line-mode ace-jump-word-mode ace-jump-char-mode)
-  :bind
-  (("C-c SPC" . ace-jump-mode)
-   ("C-x SPC" . ace-jump-mode-pop-mark)))
-
-;; disabled for now
-(use-package dashboard
-  :ensure t
-  :disabled
-  :config
-  (dashboard-setup-startup-hook)
-  :custom
-  (dashboard-items '((projects . 10)
-                     (recents  . 10)
-                     (bookmarks . 5))))
 
 (use-package magit
   :commands magit-status
@@ -495,15 +495,6 @@ yarn.lock files."
   :disabled
   :ensure t
   :after lsp-mode)
-
-(use-package eglot
-  :disabled
-  :ensure t
-  :commands eglot-ensure
-  ;; using lsp-mode for now
-  ;;:hook (vue-mode . eglot-ensure)
-  :config
-  (add-to-list 'eglot-server-programs '(vue-mode . ("vls"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modes for languages ;;
