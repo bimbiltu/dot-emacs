@@ -281,7 +281,9 @@ yarn.lock files."
   :after ivy
   :diminish
   :custom
-  (counsel-find-file-at-point t)
+  ((counsel-find-file-at-point t)
+   (counsel-file-jump-args
+    "* -type d \\( -name node_modules -o -name bower_components -o -name .git -o -name gemini -o -name tsout -o -name dist -o -false \\) -prune -false -o -type f"))
   ;;:bind ("M-x" . counsel-M-x)
   :config (counsel-mode 1))
 
@@ -504,10 +506,23 @@ yarn.lock files."
 
 (use-package vue-mode
   :ensure t
+  ;:custom
+  ;(vue-dedicated-modes '(js-mode js2-mode))
   :mode "\\.vue\\'")
 
 (use-package js2-mode
   :ensure t
+  :custom
+  ((js-chain-indent nil)
+   (js-enabled-frameworks (quote (javascript prototype)))
+   (js-indent-level 2)
+   (js2-allow-rhino-new-expr-initializer nil)
+   (js2-concat-multiline-strings (quote eol))
+   (js2-highlight-external-variables nil)
+   (js2-include-node-externs t)
+   (js2-mode-assume-strict t)
+   (js2-strict-inconsistent-return-warning nil)
+   (js2-strict-trailing-comma-warning nil))
   :mode "\\.js\\'")
 
 (use-package json-mode
@@ -616,29 +631,15 @@ yarn.lock files."
  '(column-number-mode t)
  '(compilation-read-command nil)
  '(compile-command "yarn build")
- '(counsel-file-jump-args
-   "* -type d \\( -name node_modules -o -name bower_components -o -name .git -o -name gemini -o -name tsout -o -name dist -o -false \\) -prune -false -o -type f")
  '(css-indent-offset 2)
  '(fill-column 120)
  '(indent-tabs-mode nil)
- '(js-chain-indent nil)
- '(js-enabled-frameworks (quote (javascript prototype)))
- '(js-indent-level 2)
- '(js2-allow-rhino-new-expr-initializer nil)
- '(js2-concat-multiline-strings (quote eol))
- '(js2-highlight-external-variables nil)
- '(js2-include-node-externs t)
- '(js2-mode-assume-strict t)
- '(js2-strict-inconsistent-return-warning nil)
- '(js2-strict-trailing-comma-warning nil)
  '(markdown-command "markdown_py")
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
    (quote
     (web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui company-lsp lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
- '(save-place-forget-unreadable-files nil)
- '(tab-width 4)
- '(vue-dedicated-modes (quote (js-mode js2-mode))))
+ '(tab-width 4))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
