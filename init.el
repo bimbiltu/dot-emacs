@@ -517,9 +517,12 @@ lockfiles or large files."
   ;; launching emacs and opening a file. Not sure if this is because of the above issue or not.
   (lsp-ui-flycheck-live-reporting t))
 
+;;TODO: use capf when its not experimental
 (use-package company-lsp
   :ensure t
   :after lsp-mode
+  :customize
+  (company-lsp-cache-candidates 'auto)
   :commands company-lsp)
 
 ;; TODO: get this set up
