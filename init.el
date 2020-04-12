@@ -401,7 +401,6 @@ yarn.lock files."
 
   (add-hook 'flycheck-after-syntax-check-hook
             'magnars/adjust-flycheck-automatic-syntax-eagerness)
-
   (global-flycheck-mode))
 
 
@@ -433,6 +432,7 @@ yarn.lock files."
   (company-idle-delay 0.10)
   (company-minimum-prefix-length 2)
   (company-tooltip-flip-when-above t)
+  (company-selection-wrap-around t)
   :hook ((tern-mode typescript-mode) . company-mode))
 
 (use-package yasnippet
