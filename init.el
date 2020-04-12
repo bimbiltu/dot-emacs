@@ -333,7 +333,6 @@ lockfiles or large files."
   :config (counsel-mode 1))
 
 (use-package recentf
-  :defer 2
   :custom
   (recentf-max-saved-items 200)
   (recentf-max-menu-items 0)
