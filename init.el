@@ -90,9 +90,12 @@
   (setq shell-file-name gitbash-shell))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;; core emacs config ;;
-;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; some mode agnostic config ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TODO: can I make Ctrl-/ work on macos for undo?
+;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
+
 ;; will be used to some features on large buffers like webpack bundles
 ;; This is not necessarially covered by so-long because those files might not have long lines
 (defconst large-buffer (* 450 1000))
@@ -146,17 +149,6 @@
   ("C-d" . my/duplicate-line))
 
 (global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
-(global-set-key (kbd "C-c C-c") 'compile)
-;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
-
-(defun delete-trailing-whitespace-except-md ()
-  "Call `delete-trailing-whitespace` except when in `markdown-mode`."
-  ;; use whitespace-cleanup instead?
-  (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
-(add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
-
-(use-package flyspell-mode
-  :hook (markdown-mode . flyspell-mode))
 
 ;; these cause annoying rebuilds with webpack when a dir is being watched
 (setq create-lockfiles nil)
@@ -167,6 +159,13 @@
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
+(use-package hl-todo
+  :ensure t
+  :config (global-hl-todo-mode))
+(use-package wgrep
+  :ensure t
+  :defer t)
+
 ;; some stuff from better-defaults
 ;; https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -174,6 +173,8 @@
 (global-set-key (kbd "M-Z") 'zap-to-char)
 (use-package uniquify
   :custom (uniquify-buffer-name-style 'forward))
+
+(global-set-key (kbd "C-c C-c") 'compile)
 
 ;; https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
 (use-package ansi-color
@@ -203,7 +204,7 @@ yarn.lock files."
               (> (buffer-size) large-buffer))
        (normal-backup-enable-predicate file)))
 
-;; possible alternative: https://www.emacswiki.org/emacs/backup-each-save.el
+;; alternative: https://www.emacswiki.org/emacs/backup-each-save.el
 (defun force-backup-of-buffer ()
   "Clear `buffer-backed-up`."
   (setq buffer-backed-up nil))
@@ -227,9 +228,6 @@ yarn.lock files."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Programming Productivity ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package wgrep
-  :ensure t
-  :defer t)
 (use-package iedit
   :ensure t
   :commands (iedit-mode-from-isearch)
@@ -312,10 +310,6 @@ yarn.lock files."
                      (recents  . 10)
                      (bookmarks . 5))))
 
-(use-package hl-todo
-  :ensure t
-  :config (global-hl-todo-mode))
-
 (use-package magit
   :commands magit-status
   :ensure t
@@ -336,9 +330,27 @@ yarn.lock files."
   :commands git-timemachine)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;
-;; Programming Basics ;;
-;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Config For prog modes    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package markdown-mode
+  :ensure t
+  :custom
+  (markdown-command "markdown_py")
+  :config
+  (defun delete-trailing-whitespace-except-md ()
+  "Call `delete-trailing-whitespace` except when in `markdown-mode`."
+  ;; use whitespace-cleanup instead?
+  (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
+  (add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
+
+(use-package flyspell-mode
+  :commands (flyspell-mode)
+  :hook (markdown-mode . flyspell-mode))
+
 ;; We have a lot of .ts files with a node shebang in them, so just blanket deactivate js-mode activating from a shebang
 (setq interpreter-mode-alist (rassq-delete-all 'js-mode interpreter-mode-alist))
 
@@ -632,7 +644,6 @@ yarn.lock files."
  '(css-indent-offset 2)
  '(fill-column 120)
  '(indent-tabs-mode nil)
- '(markdown-command "markdown_py")
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
    (quote
