@@ -235,6 +235,7 @@ yarn.lock files."
   (("C-;" . iedit-mode)
    ("C-h C-;" . iedit-mode-toggle-on-function)))
 
+;; TODO: remove when https://github.com/magit/forge/issues/91 is resolved
 (use-package browse-at-remote
   :ensure t
   :config
