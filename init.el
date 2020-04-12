@@ -173,6 +173,10 @@ yarn.lock files."
    ("<C-S-left>" . buf-move-left) ;;\033[1;6D
    ("<C-S-right>" . buf-move-right))) ;;\033[1;6C
 (use-package paren
+  :custom
+  (show-paren-delay 0.1)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
   :config (show-paren-mode))
 (use-package delsel
   :config (delete-selection-mode))
