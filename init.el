@@ -352,7 +352,6 @@ yarn.lock files."
          ("M-p" . flycheck-previous-error))
   :init
   (defun disable-flycheck-on-large-buffers ()
-    (message "disable")
     (when (> (buffer-size) large-buffer) (flycheck-mode -1)))
   ;; why does this need to be in init? seems to give infinite recursion in :config
   (add-hook 'prog-mode-hook 'disable-flycheck-on-large-buffers)
