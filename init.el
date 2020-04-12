@@ -215,6 +215,10 @@ yarn.lock files."
 (use-package uniquify
   :custom (uniquify-buffer-name-style 'forward))
 
+(setq ring-bell-function #'ignore
+      visible-bell nil
+      mouse-yank-at-point t)
+
 ;; https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
 (use-package ansi-color
   :commands ansi-color-apply-on-region
