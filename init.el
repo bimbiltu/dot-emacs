@@ -278,6 +278,11 @@ lockfiles or large files."
   (("C-c SPC" . ace-jump-mode)
    ("C-x SPC" . ace-jump-mode-pop-mark)))
 
+(defun delete-trailing-whitespace-except-md ()
+  "Call `delete-trailing-whitespace` except when in `markdown-mode`."
+  ;; use whitespace-cleanup instead?
+  (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
+(add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; setup counsel, source control ;;
@@ -371,12 +376,6 @@ lockfiles or large files."
   :ensure t
   :custom
   (markdown-command "markdown_py")
-  :config
-  (defun delete-trailing-whitespace-except-md ()
-  "Call `delete-trailing-whitespace` except when in `markdown-mode`."
-  ;; use whitespace-cleanup instead?
-  (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
-  (add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 
