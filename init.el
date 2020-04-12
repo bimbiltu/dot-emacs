@@ -503,13 +503,11 @@ yarn.lock files."
   :ensure t
   :mode "\\.scss\\'")
 
-(use-package vue-html-mode
-  :custom (vue-html-extra-indent 2))
-
 (use-package vue-mode
   :ensure t
-  ;:custom
-  ;(vue-dedicated-modes '(js-mode js2-mode))
+  :custom
+  (vue-dedicated-modes '(js-mode js2-mode))
+  (vue-html-extra-indent 2)
   :mode "\\.vue\\'")
 
 (use-package js2-mode
