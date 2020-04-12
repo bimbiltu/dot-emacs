@@ -127,7 +127,7 @@ lockfiles or large files."
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; will be used to some features on large buffers like webpack bundles
 ;; This is not necessarially covered by so-long because those files might not have long lines
-(defconst large-buffer (* 450 1000))
+(defconst large-buffer (* 500 1000))
 
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -336,7 +336,10 @@ lockfiles or large files."
   :custom
   (recentf-max-saved-items 200)
   (recentf-max-menu-items 0)
+  (recentf-auto-cleanup 'never)
+  (recentf-filename-handlers '(substring-no-properties abbreviate-file-name))
   :config
+  (add-hook 'kill-emacs-hook 'recentf-cleanup)
   (recentf-mode +1)
   :bind ("C-x C-r" . counsel-recentf))
 
