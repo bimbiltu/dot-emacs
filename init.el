@@ -96,7 +96,7 @@
 (defun my-backup-enable-p (file)
   "Return t if FILE is part of a blacklist or passes the normal predicate test.
 Otherwise, return nil.  The main purpose of this function is to not backup
-yarn.lock files."
+lockfiles or large files."
   (unless (or (member (file-name-nondirectory file) '("yarn.lock" "package-lock.json"))
               (> (buffer-size) large-buffer))
        (normal-backup-enable-predicate file)))
@@ -122,96 +122,17 @@ yarn.lock files."
 (add-hook 'before-save-hook #'force-backup-of-buffer)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; some programming language agnostic config ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TODO: can I make Ctrl-/ work on macos for undo?
-;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
-
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; define some globals ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; will be used to some features on large buffers like webpack bundles
 ;; This is not necessarially covered by so-long because those files might not have long lines
 (defconst large-buffer (* 450 1000))
 
-(global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
-(global-set-key (kbd "C-c C-c") 'compile)
 
-;; these cause annoying rebuilds with webpack when a dir is being watched
-(setq create-lockfiles nil)
-;; helps with lsp-mode performance
-(setq read-process-output-max (* 1024 1024))
-
-;; some stuff from better-defaults
-;; https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "M-Z") 'zap-to-char)
-
-
-(when (< emacs-major-version 27)
-  (load (concat user-emacs-directory "so-long.el")))
-(use-package so-long
-  :custom
-  (so-long-threshold 500)
-  :config (global-so-long-mode))
-(use-package winner
-  :defer 2
-  :config (winner-mode))
-(use-package windmove
-  :bind
-  (("<S-up>" . windmove-up)
-   ("<S-down>" . windmove-down)
-   ("<S-left>" . windmove-left)
-   ("<S-right>" . windmove-right)))
-;; To make these keybindings work in macOS terminal you will need to set up some key combinations to send
-;; the proper escape sequence
-;; https://emacs.stackexchange.com/questions/1020/problems-with-keybindings-when-using-terminal
-;; http://www.leonerd.org.uk/hacks/fixterms/
-(use-package buffer-move
-  :bind
-  (("<C-S-up>" . buf-move-up) ;;\033[1;6A
-   ("<C-S-down>" . buf-move-down) ;;\033[1;6B
-   ("<C-S-left>" . buf-move-left) ;;\033[1;6D
-   ("<C-S-right>" . buf-move-right))) ;;\033[1;6C
-(use-package paren
-  :custom
-  (show-paren-delay 0.1)
-  (show-paren-when-point-inside-paren t)
-  (show-paren-when-point-in-periphery t)
-  :config (show-paren-mode))
-(use-package goto-addr
-  :hook
-  ((text-mode . goto-address-mode)
-   (prog-mode . goto-address-prog-mode)))
-(use-package delsel
-  :config (delete-selection-mode))
-(use-package saveplace
-  :config (save-place-mode 1)
-  :custom
-  ;; Make exiting emacs fast on NFS
-  (save-place-forget-unreadable-files nil))
-(use-package savehist
-  :config
-  (savehist-mode 1))
-(use-package move-lines
-  :bind
-  (("M-<up>" . move-lines-up)
-   ("ESC <up>" . move-lines-up)
-   ("M-<down>" . move-lines-down)
-   ("ESC <down>" . move-lines-down)))
-(use-package my-functions
-  :bind
-  ("C-d" . my/duplicate-line))
-(use-package keyfreq
-  :ensure t
-  :config
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
-(use-package hl-todo
-  :ensure t
-  :config (global-hl-todo-mode))
-(use-package wgrep
-  :ensure t
-  :defer t)
+;;;;;;;;;;;;;;;;;;;;
+;; core ui config ;;
+;;;;;;;;;;;;;;;;;;;;
 (use-package uniquify
   :custom (uniquify-buffer-name-style 'forward))
 
@@ -235,6 +156,31 @@ yarn.lock files."
           (lambda ()
             (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
 
+(use-package winner
+  :defer 2
+  :config (winner-mode))
+(use-package windmove
+  :bind
+  (("<S-up>" . windmove-up)
+   ("<S-down>" . windmove-down)
+   ("<S-left>" . windmove-left)
+   ("<S-right>" . windmove-right)))
+;; To make these keybindings work in macOS terminal you will need to set up some key combinations to send
+;; the proper escape sequence
+;; https://emacs.stackexchange.com/questions/1020/problems-with-keybindings-when-using-terminal
+;; http://www.leonerd.org.uk/hacks/fixterms/
+(use-package buffer-move
+  :bind
+  (("<C-S-up>" . buf-move-up) ;;\033[1;6A
+   ("<C-S-down>" . buf-move-down) ;;\033[1;6B
+   ("<C-S-left>" . buf-move-left) ;;\033[1;6D
+   ("<C-S-right>" . buf-move-right))) ;;\033[1;6C
+
+(use-package goto-addr
+  :hook
+  ((text-mode . goto-address-mode)
+   (prog-mode . goto-address-prog-mode)))
+
 ;; disabled for now
 (use-package dashboard
   :ensure t
@@ -246,6 +192,78 @@ yarn.lock files."
                      (recents  . 10)
                      (bookmarks . 5))))
 
+;; disable font-lock and line numbers in really large buffers like webpack bundles
+(add-hook 'prog-mode-hook (lambda ()
+                            ;;(> (line-number-at-pos (point-max)) 5000))
+                            (when (> (buffer-size) large-buffer)
+                              (display-line-numbers-mode -1)
+                              (linum-mode -1)
+                              (font-lock-mode -1))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; some core editing config ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TODO: can I make Ctrl-/ work on macos for undo?
+;; see https://apple.stackexchange.com/questions/24261/how-do-i-send-c-that-is-control-slash-to-the-terminal
+
+;; these cause annoying rebuilds with webpack when a dir is being watched
+(setq create-lockfiles nil)
+;; helps with lsp-mode performance
+(setq read-process-output-max (* 1024 1024))
+
+(global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
+(global-set-key (kbd "C-c C-c") 'compile)
+
+;; some stuff from better-defaults
+;; https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "M-Z") 'zap-to-char)
+
+(when (< emacs-major-version 27)
+  (load (concat user-emacs-directory "so-long.el")))
+(use-package so-long
+  :custom
+  (so-long-threshold 500)
+  :config (global-so-long-mode))
+(use-package paren
+  :custom
+  (show-paren-delay 0.1)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
+  :config (show-paren-mode))
+(use-package delsel
+  :config (delete-selection-mode))
+(use-package saveplace
+  :config (save-place-mode 1)
+  :custom
+  ;; Make exiting emacs fast on NFS
+  (save-place-forget-unreadable-files nil)
+  (save-place-limit 200))
+(use-package savehist
+  :config
+  (savehist-mode 1))
+(use-package move-lines
+  :bind
+  (("M-<up>" . move-lines-up)
+   ("ESC <up>" . move-lines-up)
+   ("M-<down>" . move-lines-down)
+   ("ESC <down>" . move-lines-down)))
+(use-package my-functions
+  :bind
+  ("C-d" . my/duplicate-line))
+(use-package keyfreq
+  :ensure t
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
+(use-package hl-todo
+  :ensure t
+  :config (global-hl-todo-mode))
+(use-package wgrep
+  :ensure t
+  :defer t)
 (use-package iedit
   :ensure t
   :commands (iedit-mode-from-isearch)
@@ -624,13 +642,6 @@ yarn.lock files."
       (let ((buffer "*Completions*"))
         (and (get-buffer buffer) (kill-buffer buffer)))))
 
-;; disable font-lock in really large buffers like webpack bundles
-(add-hook 'prog-mode-hook (lambda ()
-                            ;;(> (line-number-at-pos (point-max)) 5000))
-                            (when (> (buffer-size) large-buffer)
-                              (display-line-numbers-mode -1)
-                              (linum-mode -1)
-                              (font-lock-mode -1))))
 
 ;; some packages to try out:
 ;; doom or other modeline, doom-themes, js2-refactor, company-box, purpose, diff-hl-mode, wgrep, iedit, dumb-jump
