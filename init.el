@@ -95,8 +95,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; core emacs config ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
-;; disable some features on large buffers like webpack bundles
+;; will be used to some features on large buffers like webpack bundles
+;; This is not necessarially covered by so-long because those files might not have long lines
 (defconst large-buffer (* 450 1000))
+
+(when (< emacs-major-version 27)
+  (load (concat user-emacs-directory "so-long.el")))
+(use-package so-long
+  :custom
+  (so-long-threshold 500)
+  :config (global-so-long-mode))
 
 (use-package winner
   :defer 2
@@ -593,6 +601,7 @@ yarn.lock files."
 (add-hook 'prog-mode-hook (lambda ()
                             ;;(> (line-number-at-pos (point-max)) 5000))
                             (when (> (buffer-size) large-buffer)
+                              (display-line-numbers-mode -1)
                               (linum-mode -1)
                               (font-lock-mode -1))))
 
