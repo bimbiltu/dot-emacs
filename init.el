@@ -537,8 +537,11 @@ lockfiles or large files."
   :ensure t
   :mode "\\.scss\\'")
 
+(defvar-local vue-mode-p nil)
 (use-package vue-mode
   :ensure t
+  :config
+  (add-hook 'vue-mode-hook (lambda () (setq vue-mode-p (not vue-mode-p))))
   :custom
   (vue-dedicated-modes '(js-mode js2-mode))
   (vue-html-extra-indent 2)
