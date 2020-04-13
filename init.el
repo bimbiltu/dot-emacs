@@ -155,7 +155,7 @@ lockfiles or large files."
       mouse-yank-at-point t
       hscroll-margin 2
       hscroll-step 1
-      ;; dont recenter window on cursor when scrolling
+      ;; dont recenter window on cursor when scrolling. not sure if i like this yet
       scroll-conservatively 101
       scroll-margin 0
       scroll-preserve-screen-position t
