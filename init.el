@@ -22,7 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; UI configuration ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-theme 'tango-dark)
 ;; macOS menu bar doesnt take up extra space
 (when (and (fboundp 'menu-bar-mode) (not (memq window-system '(mac ns))))
   (menu-bar-mode -1))
@@ -36,9 +35,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup package managers ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
-(let ((secrets-file (concat user-emacs-directory (file-name-as-directory "secrets"))))
-  (when (file-readable-p secrets-file) (load secrets-file)))
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -55,7 +51,23 @@
   :ensure t)
 (use-package diminish
   :ensure t)
+(use-package doom-themes
+  :ensure t
+  :init
+  (load-theme 'doom-one t))
 
+;; https://github.com/hlissner/doom-emacs/issues/2194
+;; underline cant be a different color than the foreground on terminal
+;; set foreground color to red on terminals to compensate
+(add-hook 'flycheck-mode-hook
+          (defun fix-flycheck-error-face ()
+            (unless window-system
+              (set-face-attribute 'flycheck-error t :foreground "red"))))
+
+
+(add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
+(let ((secrets-file (concat user-emacs-directory (file-name-as-directory "secrets"))))
+  (when (file-readable-p secrets-file) (load secrets-file)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup shells and executables ;;
@@ -148,7 +160,7 @@ lockfiles or large files."
       scroll-margin 0
       scroll-preserve-screen-position t
       mouse-wheel-progressive-speed nil
-      mouse-wheel-scroll-amount (1 ((shift) . 5) ((control)))
+      mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control)))
       echo-keystrokes 0.02
       ;; visit files opened from outside in the same frame
       ;; for example, when opening a json file in emacs from finder dont open the file in a separate frame
@@ -711,8 +723,6 @@ lockfiles or large files."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(flycheck-warning ((t (:background "red" :underline (:color "brightred" :style wave)))))
- '(js2-warning ((t (:underline (:color "orange" :style wave) :slant italic))))
  '(json-mode-object-name-face ((t (:inherit font-lock-keyword-face)))))
 
 (provide 'init)
