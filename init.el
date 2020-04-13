@@ -170,7 +170,7 @@ lockfiles or large files."
       ns-pop-up-frames nil
       frame-resize-pixelwise t
       window-resize-pixelwise t
-      split-width-threshold 120
+      split-width-threshold 140
       split-height-threshold nil)
 
 ;; from doom:
