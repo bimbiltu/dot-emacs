@@ -141,8 +141,32 @@ lockfiles or large files."
 (setq ring-bell-function 'ignore
       visible-bell nil
       mouse-yank-at-point t
+      hscroll-margin 2
+      hscroll-step 1
       ;; dont recenter window on cursor when scrolling
-      scroll-conservatively 101)
+      scroll-conservatively 101
+      scroll-margin 0
+      scroll-preserve-screen-position t
+      mouse-wheel-progressive-speed nil
+      mouse-wheel-scroll-amount (1 ((shift) . 5) ((control)))
+      echo-keystrokes 0.02
+      ;; visit files opened from outside in the same frame
+      ;; for example, when opening a json file in emacs from finder dont open the file in a separate frame
+      ns-pop-up-frames nil
+      frame-resize-pixelwise t
+      window-resize-pixelwise t)
+
+;; from doom:
+;; The native border "consumes" a pixel of the fringe on righter-most splits,
+;; `window-divider' does not. Available since Emacs 25.1.
+(setq window-divider-default-places t
+      window-divider-default-bottom-width 1
+      window-divider-default-right-width 1)
+(window-divider-mode)
+
+;; this really needs clipboard integration to be nice, otherwise copy/pasting
+;; doesnt work well
+;; (add-hook 'tty-setup-hook 'xterm-mouse-mode)
 
 ;; https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
 (use-package ansi-color
