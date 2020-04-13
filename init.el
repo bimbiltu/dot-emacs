@@ -138,9 +138,11 @@ lockfiles or large files."
 (use-package uniquify
   :custom (uniquify-buffer-name-style 'forward))
 
-(setq ring-bell-function #'ignore
+(setq ring-bell-function 'ignore
       visible-bell nil
-      mouse-yank-at-point t)
+      mouse-yank-at-point t
+      ;; dont recenter window on cursor when scrolling
+      scroll-conservatively 101)
 
 ;; https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
 (use-package ansi-color
