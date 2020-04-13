@@ -59,6 +59,9 @@
 ;; https://github.com/hlissner/doom-emacs/issues/2194
 ;; underline cant be a different color than the foreground on terminal
 ;; set foreground color to red on terminals to compensate
+;; This doesnt take into account emacs running with frames both in the
+;; terminal and GUI but im not worried about that situation.
+;; https://stackoverflow.com/a/5801740
 (add-hook 'flycheck-mode-hook
           (defun fix-flycheck-error-face ()
             (unless window-system
