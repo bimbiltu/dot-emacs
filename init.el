@@ -102,6 +102,16 @@
   (setq shell-file-name gitbash-shell))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; define some globals ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; will be used to some features on large buffers like webpack bundles
+;; This is not necessarially covered by so-long because those files might not have long lines
+(defconst large-buffer (* 500 1000))
+;; used to track when vue-mode is enabled
+(defvar-local vue-mode-p nil)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure file backups and autosave ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,16 +142,6 @@ lockfiles or large files."
    auto-save-interval 200
    auto-save-timeout 10)
 (add-hook 'before-save-hook #'force-backup-of-buffer)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;; define some globals ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;; will be used to some features on large buffers like webpack bundles
-;; This is not necessarially covered by so-long because those files might not have long lines
-(defconst large-buffer (* 500 1000))
-;; used to track when vue-mode is enabled
-(defvar-local vue-mode-p nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;
