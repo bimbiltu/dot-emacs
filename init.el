@@ -379,6 +379,8 @@ lockfiles or large files."
 (use-package magit
   :commands magit-status
   :ensure t
+  :config
+  (put 'magit-diff-edit-hunk-commit 'disabled nil)
   :bind ("C-x g" . 'magit-status))
 
 (use-package forge
@@ -716,4 +718,3 @@ lockfiles or large files."
 (provide 'init)
 
 ;;; init.el ends here
-(put 'magit-diff-edit-hunk-commit 'disabled nil)
