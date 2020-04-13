@@ -528,7 +528,7 @@ lockfiles or large files."
 (use-package company-lsp
   :ensure t
   :after lsp-mode
-  :customize
+  :custom
   (company-lsp-cache-candidates 'auto)
   :commands company-lsp)
 
