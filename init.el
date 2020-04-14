@@ -69,7 +69,7 @@
 
 
 (add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
-(let ((secrets-file (concat user-emacs-directory (file-name-as-directory "secrets"))))
+(let ((secrets-file (concat user-emacs-directory "secrets.el")))
   (when (file-readable-p secrets-file) (load secrets-file)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
