@@ -163,7 +163,7 @@ lockfiles or large files."
       scroll-margin 0
       scroll-preserve-screen-position t
       mouse-wheel-progressive-speed nil
-      mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control)))
+      mouse-wheel-scroll-amount '(5 ((shift) . 2))
       echo-keystrokes 0.02
       ;; visit files opened from outside in the same frame
       ;; for example, when opening a json file in emacs from finder dont open the file in a separate frame
