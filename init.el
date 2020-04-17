@@ -514,7 +514,7 @@ lockfiles or large files."
   (company-tooltip-align-annotations t)
   (company-show-numbers t)
   (company-idle-delay 0.10)
-  (company-minimum-prefix-length 2)
+  (company-minimum-prefix-length 1)
   (company-tooltip-flip-when-above t)
   (company-selection-wrap-around t)
   :hook ((tern-mode typescript-mode) . company-mode))
