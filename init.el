@@ -69,7 +69,9 @@
 (add-hook 'flycheck-mode-hook
           (defun fix-flycheck-error-face ()
             (unless window-system
-              (set-face-attribute 'flycheck-error nil :foreground "red"))))
+              (set-face-attribute 'flycheck-error nil :foreground "red")
+              (set-face-attribute 'flycheck-warning nil :foreground "yellow")
+              (set-face-attribute 'flycheck-info nil :foreground "yellow"))))
 
 
 (add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
