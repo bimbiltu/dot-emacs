@@ -14,8 +14,12 @@
 (add-hook 'after-init-hook
           (lambda ()
             (setq file-name-handler-alist file-name-handler-alist-old
-                  gc-cons-threshold (* 8 1024 1024) ;reset to 8mb,default is 800000
-                  gc-cons-percentage 0.1)
+                  ;; vue language server creates tons of garbage so this speeds
+                  ;; up auto completion a lot. Can also look into a library that only
+                  ;; runs gc when idle. Used to use 8mb/0.1 and these new settings
+                  ;; bring an auto complete test from 8 GCs and 0.7s to 2 GCs and 0.2s
+                  gc-cons-threshold (* 24 1024 1024) ;reset to 16mb,default is 800000
+                  gc-cons-percentage 0.3)
             (garbage-collect)) t)
 
 
@@ -254,7 +258,7 @@ lockfiles or large files."
 
 ;; these cause annoying rebuilds with webpack when a dir is being watched
 (setq create-lockfiles nil)
-;; helps with lsp-mode performance
+;; helps with lsp-mode performance. requires emacs >=27
 (setq read-process-output-max (* 1024 1024))
 
 (global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
