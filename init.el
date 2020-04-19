@@ -536,6 +536,11 @@ lockfiles or large files."
   ;; Can we get company results to filter based on prefix rather than fuzzy?
   ;; I.e. `this.p` should autocomplete to `this.props` but not `this.top`
 
+  ;; vls is pretty slow so live reporting doesnt work so well, sometimes
+  ;; i get error reports for code that doesnt exist anymore
+  ;; this var was made obsolete in lsp 6.3 bit will keep here for a while
+  (lsp-ui-flycheck-live-reporting nil)
+  (lsp-flycheck-live-reporting nil)
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   :hook ((vue-mode . lsp)
@@ -570,10 +575,7 @@ lockfiles or large files."
   (lsp-ui-doc-enable nil)
   (lsp-ui-doc-position 'top)
   (lsp-ui-doc-include-signature nil) ;; have eldoc display signatures
-
-  ;; FIXME: I want to use my own flycheck config for frequency, but this doesnt seem to display errors when first
-  ;; launching emacs and opening a file. Not sure if this is because of the above issue or not.
-  (lsp-ui-flycheck-live-reporting t))
+  )
 
 ;;TODO: use capf when its not experimental
 (use-package company-lsp
