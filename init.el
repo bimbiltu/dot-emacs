@@ -537,27 +537,17 @@ lockfiles or large files."
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-vetur-use-workspace-dependencies t)
-  ;; FIXME: should be the local node_modules/typescript/lib and not the tsserver binary
-  ;;:config (setq lsp-typescript-tsdk (npm-bin-utils-find "tsserver"))
 
-  ;; Can we get company results to filter based on prefix rather than fuzzy?
-  ;; I.e. `this.p` should autocomplete to `this.props` but not `this.top`
-
-  ;; vls is pretty slow so live reporting doesnt work so well, sometimes
-  ;; i get error reports for code that doesnt exist anymore
-  ;; this var was made obsolete in lsp 6.3 bit will keep here for a while
+  ;; vls is pretty slow so disable live reporting
   (lsp-ui-flycheck-live-reporting nil)
   (lsp-flycheck-live-reporting nil)
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
+  ;; TODO: look into using lsp for other modes like js2, typescript, json to start
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
   :hook ((lsp-mode . lsp-enable-which-key-integration)
-         (vue-mode . lsp)
-         ;; TODO: look into using lsp for these as well
-         ;;(js2-mode . lsp)
-         ;;(typescript-mode . lsp)
-         ;;(json-mode . lsp)
-         ))
+         ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
+         (vue-mode . lsp)))
 
 (use-package lsp-ui
   :ensure t
