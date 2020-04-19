@@ -595,9 +595,32 @@ lockfiles or large files."
 
 ;; TODO: get this set up
 (use-package dap-mode
-  :disabled
   :ensure t
-  :after lsp-mode)
+  :commands dap-mode
+  :init
+  ;; use init instead of :hook since the later quotes things
+  (add-hook
+   'dap-mode-hook
+   (defun setup-dap-mode ()
+     (dap-ui-mode 1)
+     (dap-ui-breakpoints)
+     (dap-ui-locals)
+     ;; enables mouse hover support
+     ;;(dap-tooltip-mode 1)
+     ;; use tooltips for mouse hover
+     ;; if it is not enabled `dap-mode' will use the minibuffer.
+     ;;(tooltip-mode 1)
+     ;; displays floating panel with debug buttons
+              ;; requies emacs 26+
+     ;;(dap-ui-controls-mode 1)
+     (require 'dap-node)
+     (dap-register-debug-template "Test Node Configuration"
+                                  (list :type "node"
+                                        :request "launch"
+                                        :outFiles '("dist/*.js")
+                                        :cwd (expand-file-name default-directory)
+                                        :program nil
+                                        :name "Node::Run")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modes for languages ;;
@@ -740,7 +763,7 @@ lockfiles or large files."
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
    (quote
-    (web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui company-lsp lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
+    (posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui company-lsp lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
  '(tab-width 4))
 
 (custom-set-faces
