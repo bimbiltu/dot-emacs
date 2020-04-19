@@ -335,6 +335,12 @@ lockfiles or large files."
   (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
 (add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
 
+(use-package which-key
+  :ensure t
+  :diminish
+  :config (which-key-mode))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; setup counsel, source control ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -528,6 +534,8 @@ lockfiles or large files."
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :init
+  (setq lsp-keymap-prefix "C-c l")
   :custom
   (lsp-vetur-use-workspace-dependencies t)
   ;; FIXME: should be the local node_modules/typescript/lib and not the tsserver binary
@@ -543,7 +551,9 @@ lockfiles or large files."
   (lsp-flycheck-live-reporting nil)
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
-  :hook ((vue-mode . lsp)
+  ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
+  :hook ((lsp-mode . lsp-enable-which-key-integration)
+         (vue-mode . lsp)
          ;; TODO: look into using lsp for these as well
          ;;(js2-mode . lsp)
          ;;(typescript-mode . lsp)
