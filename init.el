@@ -534,9 +534,8 @@ lockfiles or large files."
 (use-package lsp-mode
   :ensure t
   :commands lsp
-  :init
-  (setq lsp-keymap-prefix "C-c l")
   :custom
+  (lsp-keymap-prefix "C-c l")
   (lsp-vetur-use-workspace-dependencies t)
   ;; FIXME: should be the local node_modules/typescript/lib and not the tsserver binary
   ;;:config (setq lsp-typescript-tsdk (npm-bin-utils-find "tsserver"))
