@@ -556,13 +556,16 @@ lockfiles or large files."
   :after lsp-mode
   :commands lsp-ui-mode
   :config
-  ;; FIXME: this is a workaround for https://github.com/emacs-lsp/lsp-mode/issues/1288
+  ;; vue files require some extra setup
   (when vue-mode-p
-    (let* ((lsp-ui-modes '(typescript-mode js-mode css-mode vue-html-mode))
-           (eslint-modes (cons 'vue-mode lsp-ui-modes)))
+    (let* ((vue-block-modes (mapcar (lambda (l) (plist-get l :mode)) vue-modes))
+           (vue-file-modes (cons 'vue-mode vue-block-modes)))
 
-      (mapc 'lsp-ui-flycheck-add-mode lsp-ui-modes)
-      (mapc (apply-partially 'flycheck-add-mode 'javascript-eslint) eslint-modes)
+      ;; lsp-ui already runs flycheck for vue-mode
+      (mapc 'lsp-ui-flycheck-add-mode vue-block-modes)
+      ;; enable javascript-eslint checker for all possible major modes in a vue file
+      (mapc (apply-partially 'flycheck-add-mode 'javascript-eslint) vue-file-modes)
+      ;; run eslint checker after lsp checker
       (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
   (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
