@@ -390,7 +390,9 @@ lockfiles or large files."
   :custom
   ((counsel-find-file-at-point t)
    (counsel-file-jump-args
-    "* -type d \\( -name node_modules -o -name bower_components -o -name .git -o -name gemini -o -name tsout -o -name dist -o -false \\) -prune -false -o -type f"))
+    '("." "-type" "d" "(" "-name" "node_modules" "-o" "-name" "bower_components"
+      "-o" "-name" ".git" "-o" "-name" "gemini" "-o" "-name" "tsout"
+      "-o" "-name" "dist" "-o" "-false" ")" "-prune" "-false" "-o" "-type" "f")))
   ;;:bind ("M-x" . counsel-M-x)
   :config (counsel-mode 1))
 
