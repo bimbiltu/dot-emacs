@@ -91,6 +91,8 @@
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
   :ensure t
+  :custom
+  (exec-path-from-shell-arguments nil)
   :config
   (exec-path-from-shell-initialize))
 
