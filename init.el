@@ -593,35 +593,38 @@ lockfiles or large files."
   (company-lsp-cache-candidates 'auto)
   :commands company-lsp)
 
-;; TODO: get this set up
+;; TODO: set up more environments
 (use-package dap-mode
   :ensure t
   :commands dap-mode
-  :init
-  ;; use init instead of :hook since the later quotes things
-  (add-hook
-   'dap-mode-hook
+  :config
    (defun setup-dap-mode ()
      (dap-ui-mode 1)
      (dap-ui-breakpoints)
      (dap-ui-locals)
+     (dap-ui-expressions)
      ;; enables mouse hover support
-     ;;(dap-tooltip-mode 1)
+     (dap-tooltip-mode 1)
      ;; use tooltips for mouse hover
      ;; if it is not enabled `dap-mode' will use the minibuffer.
-     ;;(tooltip-mode 1)
-     ;; displays floating panel with debug buttons
-              ;; requies emacs 26+
-     ;;(dap-ui-controls-mode 1)
-     (require 'dap-node)
-     (dap-register-debug-template "Test Node Configuration"
-                                  (list :type "node"
-                                        :request "launch"
-                                        :outFiles '("dist/*.js")
-                                        :cwd (expand-file-name default-directory)
-                                        :program nil
-                                        :name "Node::Run")))))
+     (tooltip-mode 1)
 
+     ;; displays floating panel with debug buttons
+     ;; requies emacs 26+
+     (when window-system (dap-ui-controls-mode 1)))
+   (save-excursion (setup-dap-mode)))
+
+(use-package dap-node
+  :after dap-mode
+  :config
+  (dap-register-debug-template
+   "Test Node Configuration"
+   (list :type "node"
+         :request "launch"
+         :outFiles '("dist/*.js")
+         :cwd (expand-file-name default-directory)
+         :program nil
+         :name "Node::Run")))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modes for languages ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
