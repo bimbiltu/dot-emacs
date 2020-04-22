@@ -612,7 +612,7 @@ lockfiles or large files."
      ;; displays floating panel with debug buttons
      ;; requies emacs 26+
      (when window-system (dap-ui-controls-mode 1)))
-   (save-excursion (setup-dap-mode)))
+   (setup-dap-mode))
 
 (use-package dap-node
   :after dap-mode
