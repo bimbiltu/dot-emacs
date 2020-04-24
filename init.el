@@ -177,9 +177,7 @@ lockfiles or large files."
       ;; for example, when opening a json file in emacs from finder dont open the file in a separate frame
       ns-pop-up-frames nil
       frame-resize-pixelwise t
-      window-resize-pixelwise t
-      split-width-threshold 140
-      split-height-threshold nil)
+      window-resize-pixelwise t)
 
 ;; from doom:
 ;; The native border "consumes" a pixel of the fringe on righter-most splits,
