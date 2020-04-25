@@ -547,7 +547,7 @@ lockfiles or large files."
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
-  :hook ((lsp-mode . lsp-enable-which-key-integration)
+  :hook ((lsp-mode . (lambda () (lsp-enable-which-key-integration t)))
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)))
 
