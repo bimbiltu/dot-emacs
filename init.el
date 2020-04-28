@@ -121,6 +121,10 @@
 (defconst large-buffer (* 500 1000))
 ;; used to track when vue-mode is enabled
 (defvar-local vue-mode-p nil)
+(defvar-local large-buffer-p nil)
+(add-hook 'prog-mode-hook (defun my-check-buffer-size ()
+                            (when (> (buffer-size) large-buffer)
+                              (setq large-buffer-p t))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -633,13 +637,16 @@ lockfiles or large files."
 
 (use-package tern
   :ensure t
-  :if (executable-find "tern")
+  :if nil ;;(executable-find "tern")
   ;; :config
   ;; (tern-command (append tern-command '("--no-port-file"))))
   :hook (js2-mode . (lambda () (unless (> (buffer-size) large-buffer) (tern-mode)))))
 
+;; package seems to have been deleted off github and melpa
+;; https://www.reddit.com/r/emacs/comments/g8i10n/companytern_on_melpa_pulled/
 (use-package company-tern
-  :ensure t
+  :if nil
+  :ensure nil
   :defer
   :after (tern company)
   :init
@@ -652,7 +659,7 @@ lockfiles or large files."
 
 (use-package tide
   :ensure t
-  :after (typescript-mode)
+  :after (:any typescript-mode js2-mode)
   :preface
   (defun setup-tide-mode ()
     "Setup tide."
@@ -674,18 +681,17 @@ lockfiles or large files."
   :custom
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
-
   ;; dont activate tide on vue files
-  :hook ((typescript-mode . (lambda()
-                              (when (is-ts-file) (setup-tide-mode)))))
+  :hook ((typescript-mode js2-mode) . (lambda()
+                                        (unless (or vue-mode-p large-buffer-p) (setup-tide-mode))))
   :config
   ;; We currently do not eslint on ts files
   ;; https://github.com/ananthakumaran/tide/issues/308
   ;; (flycheck-add-next-checker 'typescript-tide '(warning . javascript-eslint))
   ;; Dont interfere with LSP keybindings for vue files with ts scripts
-  (when (is-ts-file) (progn
-                       (bind-key "C-c C-d" 'tide-documentation-at-point tide-mode-map)
-                       (bind-key "C-c C-f" 'tide-fix tide-mode-map))))
+  (unless vue-mode-p
+    (bind-key "C-c C-d" 'tide-documentation-at-point tide-mode-map)
+    (bind-key "C-c C-f" 'tide-fix tide-mode-map)))
 
 (use-package web-mode
   :ensure t
