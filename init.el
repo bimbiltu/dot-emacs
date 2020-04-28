@@ -60,6 +60,10 @@
   :init
   (load-theme 'doom-one t))
 
+;; helper libraries
+(use-package f
+  :ensure t)
+
 ;; https://github.com/hlissner/doom-emacs/issues/2194
 ;; underline cant be a different color than the foreground on terminal
 ;; set foreground color to red on terminals to compensate
@@ -617,14 +621,26 @@ lockfiles or large files."
 (use-package dap-node
   :after dap-mode
   :config
-  (dap-register-debug-template
-   "Test Node Configuration"
-   (list :type "node"
-         :request "launch"
-         :outFiles '("dist/*.js")
-         :cwd (expand-file-name default-directory)
-         :program nil
-         :name "Node::Run")))
+  (defun my-find-package-dir ()
+    (let* ((expanded-default-dir (f-expand default-directory))
+           (package-dir (f-traverse-upwards
+                         (lambda (path)
+                           (f-exists? (f-expand "package.json" path)))
+
+                         ;; need otherwise f-traverse-upwards can return path with ~
+                         expanded-default-dir)))
+           (or package-dir expanded-default-dir)))
+
+  (let ((node-package-dir (my-find-package-dir)))
+    (dap-register-debug-template
+     "My Node Configuration"
+     (list :type "node"
+           :request "launch"
+           ;; could build the expected filename rather than use glob here
+           :outFiles (list (f-join node-package-dir "dist" "lib-common" "**" "*.js"))
+           :cwd node-package-dir
+           :program nil
+           :name "Node::Run"))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
