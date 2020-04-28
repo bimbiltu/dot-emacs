@@ -685,6 +685,8 @@ lockfiles or large files."
   :hook ((typescript-mode js2-mode) . (lambda()
                                         (unless (or vue-mode-p large-buffer-p) (setup-tide-mode))))
   :config
+  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+
   ;; We currently do not eslint on ts files
   ;; https://github.com/ananthakumaran/tide/issues/308
   ;; (flycheck-add-next-checker 'typescript-tide '(warning . javascript-eslint))
