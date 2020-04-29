@@ -547,6 +547,8 @@ lockfiles or large files."
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-vetur-use-workspace-dependencies t)
+  (lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
+  (lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
 
   ;; vls is pretty slow so disable live reporting
   (lsp-ui-flycheck-live-reporting nil)
