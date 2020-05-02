@@ -553,6 +553,7 @@ lockfiles or large files."
   ;; vls is pretty slow so disable live reporting
   (lsp-ui-flycheck-live-reporting nil)
   (lsp-flycheck-live-reporting nil)
+  (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
@@ -590,14 +591,6 @@ lockfiles or large files."
   (lsp-ui-doc-position 'top)
   (lsp-ui-doc-include-signature nil) ;; have eldoc display signatures
   )
-
-;;TODO: use capf when its not experimental
-(use-package company-lsp
-  :ensure t
-  :after lsp-mode
-  :custom
-  (company-lsp-cache-candidates 'auto)
-  :commands company-lsp)
 
 ;; TODO: set up more environments
 (use-package dap-mode
@@ -786,7 +779,7 @@ lockfiles or large files."
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
    (quote
-    (posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui company-lsp lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
+    (posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
  '(tab-width 4))
 
 (custom-set-faces
