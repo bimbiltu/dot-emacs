@@ -674,6 +674,10 @@ lockfiles or large files."
   :pin gnu
   :mode "\\.json\\'")
 
+(use-package protobuf-mode
+  :ensure t
+  :mode "\\.proto\\'")
+
 (use-package tern
   :ensure t
   :if nil ;;(executable-find "tern")
