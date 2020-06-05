@@ -371,7 +371,11 @@ lockfiles or large files."
   ("C-c p" . projectile-command-map)
   :custom
   (projectile-use-git-grep t)
-  (projectile-completion-system 'ivy))
+  (projectile-completion-system 'ivy)
+  :config
+  ;; https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-projectile.el
+  (let ((val (or (getenv "P4CONFIG") ".p4rc")))
+    (add-to-list 'projectile-project-root-files val t)))
 
 (use-package counsel-projectile
   :ensure t
