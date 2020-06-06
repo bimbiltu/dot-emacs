@@ -728,6 +728,11 @@ lockfiles or large files."
   :custom
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
+  ;; tide upstream has this disabled for now
+  (tide-native-json-parsing (and (>= emacs-major-version 27)
+                                 (functionp 'json-serialize)
+                                 (functionp 'json-parse-buffer)
+                                 (functionp 'json-parse-string)))
   ;; dont activate tide on vue files
   :hook ((typescript-mode js2-mode) . (lambda()
                                         (unless (or vue-mode-p large-buffer-p) (setup-tide-mode))))
