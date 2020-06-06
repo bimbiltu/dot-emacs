@@ -40,7 +40,6 @@
 ;; Setup package managers ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
-(setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (when (< emacs-major-version 27)
@@ -80,7 +79,7 @@
 
 (add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
 (let ((secrets-file (concat user-emacs-directory "secrets.el")))
-  (when (file-readable-p secrets-file) (load secrets-file)))
+  (when (file-readable-p secrets-file) (load secrets-file nil t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup shells and executables ;;
@@ -281,7 +280,7 @@ lockfiles or large files."
 (global-set-key (kbd "M-Z") 'zap-to-char)
 
 (when (< emacs-major-version 27)
-  (load (concat user-emacs-directory "so-long.el")))
+  (load (concat user-emacs-directory "so-long.el") nil t))
 (use-package so-long
   :custom
   (so-long-threshold 500)
@@ -791,8 +790,7 @@ lockfiles or large files."
  '(indent-tabs-mode nil)
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
-   (quote
-    (posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package)))
+   '(posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
  '(tab-width 4))
 
 (custom-set-faces
