@@ -681,6 +681,9 @@ lockfiles or large files."
   :ensure t
   :mode "\\.proto\\'")
 
+(use-package c++-mode
+  :mode "\\.tpp\\'")
+
 (use-package tern
   :ensure t
   :if nil ;;(executable-find "tern")
