@@ -95,7 +95,7 @@
   :if (memq window-system '(mac ns x))
   :ensure t
   :custom
-  (exec-path-from-shell-arguments nil)
+  (exec-path-from-shell-arguments '("-l"))
   :config
   (exec-path-from-shell-initialize))
 
