@@ -97,6 +97,8 @@
   :custom
   (exec-path-from-shell-arguments '("-l"))
   :config
+  (add-to-list 'exec-path-from-shell-variables "GOPATH")
+  (add-to-list 'exec-path-from-shell-variables "GOPRIVATE")
   (exec-path-from-shell-initialize))
 
 (when (eq system-type 'darwin)
@@ -563,7 +565,8 @@ lockfiles or large files."
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
   :hook ((lsp-mode . (lambda () (lsp-enable-which-key-integration t)))
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
-         (vue-mode . lsp)))
+         (vue-mode . lsp)
+         (go-mode . lsp)))
 
 (use-package lsp-ui
   :ensure t
@@ -683,6 +686,10 @@ lockfiles or large files."
 
 (use-package c++-mode
   :mode "\\.tpp\\'")
+
+(use-package go-mode
+  :ensure t
+  :mode "\\.go\\'")
 
 (use-package tern
   :ensure t
