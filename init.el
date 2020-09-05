@@ -574,7 +574,7 @@ lockfiles or large files."
   :commands lsp-ui-mode
   :preface
   (defun my-setup-lsp-vue-flycheck()
-    (when vue-mode-p
+    (when (boundp 'vue-modes)
       (let* ((vue-block-modes (mapcar (lambda (l) (plist-get l :mode)) vue-modes))
              (vue-file-modes (cons 'vue-mode vue-block-modes)))
 
