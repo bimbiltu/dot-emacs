@@ -572,25 +572,24 @@ lockfiles or large files."
   :ensure t
   :after lsp-mode
   :commands lsp-ui-mode
+  :preface
+  (defun my-setup-lsp-vue-flycheck()
+    (when vue-mode-p
+      (let* ((vue-block-modes (mapcar (lambda (l) (plist-get l :mode)) vue-modes))
+             (vue-file-modes (cons 'vue-mode vue-block-modes)))
+
+        ;; lsp-ui already runs flycheck for vue-mode
+        (mapc 'lsp-flycheck-add-mode vue-file-modes)
+        ;; enable javascript-eslint checker for all possible major modes in a vue file
+        (mapc (apply-partially 'flycheck-add-mode 'javascript-eslint) vue-file-modes)
+        ;; run eslint checker after lsp checker since we use eslint with vue plugin
+        (flycheck-add-next-checker 'lsp 'javascript-eslint))))
+  :hook
+  ('lsp-diagnostics-mode-hook . 'my-setup-lsp-vue-flycheck)
   :config
-  ;; vue files require some extra setup
-  (when vue-mode-p
-    (let* ((vue-block-modes (mapcar (lambda (l) (plist-get l :mode)) vue-modes))
-           (vue-file-modes (cons 'vue-mode vue-block-modes)))
-
-      ;; lsp-ui already runs flycheck for vue-mode
-      (mapc 'lsp-ui-flycheck-add-mode vue-block-modes)
-      ;; enable javascript-eslint checker for all possible major modes in a vue file
-      (mapc (apply-partially 'flycheck-add-mode 'javascript-eslint) vue-file-modes)
-      ;; run eslint checker after lsp checker
-      (flycheck-add-next-checker 'lsp 'javascript-eslint)))
-
   (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
   :custom
   (lsp-ui-sideline-enable nil)
-
-  (lsp-prefer-flymake nil)
-  (lsp-ui-flycheck-enable t)
 
   ;; dont automatically show docs, instead bind lsp-ui-doc-glance
   (lsp-ui-doc-enable nil)
