@@ -585,7 +585,7 @@ lockfiles or large files."
         ;; run eslint checker after lsp checker since we use eslint with vue plugin
         (flycheck-add-next-checker 'lsp 'javascript-eslint))))
   :hook
-  ('lsp-diagnostics-mode-hook . 'my-setup-lsp-vue-flycheck)
+  ('lsp-diagnostics-mode . 'my-setup-lsp-vue-flycheck)
   :config
   (bind-key "C-c C-d" 'lsp-ui-doc-glance lsp-mode-map)
   :custom
@@ -593,9 +593,8 @@ lockfiles or large files."
 
   ;; dont automatically show docs, instead bind lsp-ui-doc-glance
   (lsp-ui-doc-enable nil)
-  (lsp-ui-doc-position 'top)
   (lsp-ui-doc-include-signature nil) ;; have eldoc display signatures
-  )
+  (lsp-ui-doc-position 'top))
 
 ;; TODO: set up more environments
 (use-package dap-mode
