@@ -580,8 +580,6 @@ lockfiles or large files."
 
         ;; lsp-ui already runs flycheck for vue-mode
         (mapc 'lsp-flycheck-add-mode vue-file-modes)
-        ;; enable javascript-eslint checker for all possible major modes in a vue file
-        (mapc (apply-partially 'flycheck-add-mode 'javascript-eslint) vue-file-modes)
         ;; run eslint checker after lsp checker since we use eslint with vue plugin
         (flycheck-add-next-checker 'lsp 'javascript-eslint))))
   :hook
