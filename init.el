@@ -551,6 +551,8 @@ lockfiles or large files."
   :commands lsp
   :custom
   (lsp-keymap-prefix "C-c l")
+  (lsp-enable-dap-auto-configure nil)
+
   (lsp-vetur-use-workspace-dependencies t)
   (lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
   (lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
