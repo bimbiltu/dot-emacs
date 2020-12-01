@@ -273,6 +273,7 @@ lockfiles or large files."
 (setq read-process-output-max (* 1024 1024))
 
 (global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
+(make-variable-buffer-local 'compile-command)
 (global-set-key (kbd "C-c C-c") 'compile)
 
 ;; some stuff from better-defaults
@@ -683,7 +684,9 @@ lockfiles or large files."
   :mode "\\.proto\\'")
 
 (use-package c++-mode
-  :mode "\\.tpp\\'")
+  :mode "\\.tpp\\'"
+  :hook
+  (c++-mode . (lambda () (unbind-key "C-c C-c" c++-mode-map))))
 
 (use-package go-mode
   :ensure t
