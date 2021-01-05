@@ -442,6 +442,9 @@ lockfiles or large files."
   :ensure t
   :commands git-timemachine)
 
+(use-package tramp
+  :config
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Config For prog modes    ;;
