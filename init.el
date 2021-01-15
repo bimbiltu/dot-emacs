@@ -695,23 +695,6 @@ lockfiles or large files."
   :ensure t
   :mode "\\.go\\'")
 
-(use-package tern
-  :ensure t
-  :if nil ;;(executable-find "tern")
-  ;; :config
-  ;; (tern-command (append tern-command '("--no-port-file"))))
-  :hook (js2-mode . (lambda () (unless (> (buffer-size) large-buffer) (tern-mode)))))
-
-;; package seems to have been deleted off github and melpa
-;; https://www.reddit.com/r/emacs/comments/g8i10n/companytern_on_melpa_pulled/
-(use-package company-tern
-  :if nil
-  :ensure nil
-  :defer
-  :after (tern company)
-  :init
-  (add-to-list 'company-backends 'company-tern))
-
 (use-package typescript-mode
   :ensure t
   :custom (typescript-indent-level 2)
