@@ -688,6 +688,9 @@ lockfiles or large files."
 
 (use-package c++-mode
   :mode "\\.tpp\\'"
+  :config
+  (c-set-offset 'arglist-intro '++)
+  (c-set-offset 'statement-cont '++)
   :hook
   (c++-mode . (lambda () (unbind-key "C-c C-c" c++-mode-map))))
 
