@@ -688,11 +688,17 @@ lockfiles or large files."
 
 (use-package c++-mode
   :mode "\\.tpp\\'"
-  :config
-  (c-set-offset 'arglist-intro '++)
-  (c-set-offset 'statement-cont '++)
+  :preface
+  (defun my-setup-c++-offsets ()
+    "Sets up some c offsets for c++ mode"
+    (c-set-offset 'arglist-intro '++)
+    (c-set-offset 'statement-cont '++)
+    (c-set-offset 'innamespace 0))
   :hook
-  (c++-mode . (lambda () (unbind-key "C-c C-c" c++-mode-map))))
+  ;; use a hook because :config will only run for tpp files
+  (c++-mode . (lambda () (progn
+                           (unbind-key "C-c C-c" c++-mode-map)
+                           (my-setup-c++-offsets)))))
 
 (use-package go-mode
   :ensure t
