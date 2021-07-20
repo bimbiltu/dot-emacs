@@ -7,21 +7,17 @@
 (defvar file-name-handler-alist-old file-name-handler-alist)
 (setq package-enable-at-startup nil
       file-name-handler-alist nil
-      message-log-max 16384
-      gc-cons-threshold 402653184
-      gc-cons-percentage 0.6)
+      message-log-max 16384)
 
 (add-hook 'after-init-hook
           (lambda ()
             (setq file-name-handler-alist file-name-handler-alist-old
-                  ;; vue language server creates tons of garbage so this speeds
-                  ;; up auto completion a lot. Can also look into a library that only
-                  ;; runs gc when idle. Used to use 8mb/0.1 and these new settings
-                  ;; bring an auto complete test from 8 GCs and 0.7s to 2 GCs and 0.2s
-                  gc-cons-threshold (* 24 1024 1024) ;reset to 16mb,default is 800000
+                  ;; vue language server creates tons of garbage so this speeds up auto completion a lot. Can also look
+                  ;; into a library that only runs gc when idle. Used to use 8mb threshold 0.1 percentage and these new
+                  ;; settings bring an auto complete test from 8 GCs and 0.7s to 2 GCs and 0.2s
+                  gc-cons-threshold (* 24 1024 1024) ;reset to 24mb,default is 800000
                   gc-cons-percentage 0.3)
             (garbage-collect)) t)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; UI configuration ;;
