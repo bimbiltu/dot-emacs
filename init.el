@@ -338,11 +338,12 @@ lockfiles or large files."
   (("C-c SPC" . ace-jump-mode)
    ("C-x SPC" . ace-jump-mode-pop-mark)))
 
-(defun delete-trailing-whitespace-except-md ()
-  "Call `delete-trailing-whitespace` except when in `markdown-mode`."
-  ;; use whitespace-cleanup instead?
-  (unless (eq major-mode 'markdown-mode) (delete-trailing-whitespace)))
-(add-hook 'before-save-hook 'delete-trailing-whitespace-except-md)
+(use-package ws-butler
+  :ensure t
+  :diminish
+  :custom
+  (ws-butler-keep-whitespace-before-point nil)
+  :hook (prog-mode . ws-butler-mode))
 
 (use-package which-key
   :ensure t
