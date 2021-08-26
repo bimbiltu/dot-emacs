@@ -56,5 +56,11 @@
   ;; put the point in the lowest line and return
   (next-line arg))
 
+(defun my/p4-edit ()
+  "Opens the file visited by the buffer using p4 edit and then reverts the buffer."
+  (interactive)
+  (shell-command (concat "p4 edit " buffer-file-name))
+  (revert-buffer nil t))
+
 (provide 'my-functions)
 ;;; my-functions.el ends here

@@ -65,6 +65,8 @@
 ;; This doesnt take into account emacs running with frames both in the
 ;; terminal and GUI but im not worried about that situation.
 ;; https://stackoverflow.com/a/5801740
+;; TODO: fix multi line errors not showing anything in terminal
+;; this was changed as a result of https://github.com/flycheck/flycheck/issues/1730
 (add-hook 'flycheck-mode-hook
           (defun fix-flycheck-error-face ()
             (unless window-system
@@ -268,7 +270,7 @@ lockfiles or large files."
 ;; helps with lsp-mode performance. requires emacs >=27
 (setq read-process-output-max (* 1024 1024))
 
-(global-set-key [f5] (lambda () (interactive) (revert-buffer nil t)))
+(global-set-key [f5] (defun my/force-revert-buffer () (interactive) (revert-buffer nil t)))
 (make-variable-buffer-local 'compile-command)
 (global-set-key (kbd "C-c C-c") 'compile)
 
@@ -308,6 +310,7 @@ lockfiles or large files."
    ("M-<down>" . move-lines-down)
    ("ESC <down>" . move-lines-down)))
 (use-package my-functions
+  :commands (my/p4-edit)
   :bind
   ("C-d" . my/duplicate-line))
 (use-package keyfreq
