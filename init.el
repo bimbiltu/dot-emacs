@@ -593,6 +593,10 @@ lockfiles or large files."
 
   (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   (lsp-eldoc-render-all t)
+
+  (lsp-clients-clangd-executable "clangd-11")
+  (lsp-clients-clangd-args '("--suggest-missing-includes"))
+
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
