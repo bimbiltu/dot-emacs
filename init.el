@@ -693,7 +693,9 @@ lockfiles or large files."
     "Sets up some c offsets for c++ mode"
     (c-set-offset 'arglist-intro '++)
     (c-set-offset 'statement-cont '++)
-    (c-set-offset 'innamespace 0))
+    (c-set-offset 'innamespace 0)
+    (c-set-offset 'brace-list-open 0)
+    (c-set-offset 'brace-list-entry '+))
   :hook
   ;; use a hook because :config will only run for tpp files
   (c++-mode . (lambda () (progn
