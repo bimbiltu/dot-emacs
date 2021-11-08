@@ -776,7 +776,7 @@ lockfiles or large files."
 ;;;;;;;;;;;;;;;;;;
 ;; Delete *Completions* buffer (not as useful with ivy)
 (add-hook 'minibuffer-exit-hook
-   '(lambda ()
+   (lambda ()
       (let ((buffer "*Completions*"))
         (and (get-buffer buffer) (kill-buffer buffer)))))
 
