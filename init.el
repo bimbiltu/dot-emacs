@@ -768,7 +768,10 @@ lockfiles or large files."
            (web-mode-enable-current-column-highlight t)
            (web-mode-enable-current-element-highlight t)
            (web-mode-markup-indent-offset 2))
-  :mode "\\.html?\\'")
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.[jt]sx\\'" . web-mode))
+  :config
+  (add-hook 'web-mode-hook (lambda() (when (string-match "\\.[jt]sx\\'" buffer-file-name) (setup-tide-mode)))))
 
 
 ;;;;;;;;;;;;;;;;;;
