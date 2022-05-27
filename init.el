@@ -508,6 +508,9 @@ lockfiles or large files."
   ;; buffer-sensitive adjustment above.
   (make-variable-buffer-local 'flycheck-idle-change-delay)
 
+  ; Modify built in checkers to run on other modes
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
   (add-hook 'flycheck-after-syntax-check-hook
             'magnars/adjust-flycheck-automatic-syntax-eagerness)
   (global-flycheck-mode))
@@ -711,6 +714,9 @@ lockfiles or large files."
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'")
 
+(defun file-is-react ()
+  "Return non-nil if this is a file with react jsx or tsx."
+  (string-match "\\.[jt]sx\\'" buffer-file-name))
 (use-package tide
   :ensure t
   :after (:any typescript-mode js2-mode)
@@ -744,7 +750,15 @@ lockfiles or large files."
   :hook ((typescript-mode js2-mode) . (lambda()
                                         (unless (or vue-mode-p large-buffer-p) (setup-tide-mode))))
   :config
-  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+  (add-hook 'tide-mode-hook
+            (lambda()
+              (if (file-is-react)
+                  ; Run eslint after tsx-tide, run jsx-tide after eslint
+                  (progn
+                    (flycheck-add-next-checker 'tsx-tide 'javascript-eslint 'append)
+                    (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append))
+                ; if not react, run javascript-tide after eslint
+                (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append))))
 
   ;; We currently do not eslint on ts files
   ;; https://github.com/ananthakumaran/tide/issues/308
@@ -771,7 +785,7 @@ lockfiles or large files."
   :mode (("\\.html?\\'" . web-mode)
          ("\\.[jt]sx\\'" . web-mode))
   :config
-  (add-hook 'web-mode-hook (lambda() (when (string-match "\\.[jt]sx\\'" buffer-file-name) (setup-tide-mode)))))
+  (add-hook 'web-mode-hook (lambda() (when (file-is-react) (setup-tide-mode)))))
 
 
 ;;;;;;;;;;;;;;;;;;
