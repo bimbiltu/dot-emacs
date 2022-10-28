@@ -764,7 +764,11 @@ lockfiles or large files."
                     (flycheck-add-next-checker 'tsx-tide 'javascript-eslint 'append)
                     (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append))
                 ; if not react, run javascript-tide after eslint
-                (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append))))
+                (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+                ;; enable eslint in ts files
+                ;; https://github.com/ananthakumaran/tide/issues/308
+                (flycheck-add-next-checker 'typescript-tide 'javascript-eslint)
+            )))
 
   ;; We currently do not eslint on ts files
   ;; https://github.com/ananthakumaran/tide/issues/308
