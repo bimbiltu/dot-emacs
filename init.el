@@ -739,6 +739,7 @@ lockfiles or large files."
      (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
      (string-match "\\.ts\\'" buffer-file-name)))
   :custom
+  (tide-server-max-response-length (* 3 1024 1024))
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
   (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
   ;; tide upstream has this disabled for now
