@@ -85,6 +85,8 @@
 
 ;; Load alternative shells depending on OS
 (defconst homebrew-bash "/usr/local/bin/bash")
+(defconst macos-zsh "/bin/zsh")
+(defconst macos-shell-to-use macos-zsh)
 (defconst gitbash-shell "C:\\Program Files\\Git\\bin\\bash.exe")
 
 ;; set $PATH according to my shell (including .profile) when launching GUI emacs
@@ -103,9 +105,9 @@
   (let* ((gls-exec (executable-find "gls")))
     (when gls-exec (setq insert-directory-program gls-exec)))
 
-  (when (file-executable-p homebrew-bash)
-    (setenv "SHELL" homebrew-bash)
-    (setq shell-file-name homebrew-bash)))
+  (when (file-executable-p macos-shell-to-use)
+    (setenv "SHELL" macos-shell-to-use)
+    (setq shell-file-name macos-shell-to-use)))
 
 (when (and (eq system-type 'windows-nt) (file-executable-p gitbash-shell))
   (add-to-list 'exec-path "C:/Program Files/Git/usr/bin")
