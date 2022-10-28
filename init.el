@@ -457,6 +457,11 @@ lockfiles or large files."
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 
+(use-package yaml-mode
+  :ensure t
+  :mode (("\\.yaml'" . yaml-mode)
+         ("\\.yml'" . yaml-mode)))
+
 (use-package flyspell-mode
   :commands (flyspell-mode)
   :hook (markdown-mode . flyspell-mode))
@@ -816,7 +821,7 @@ lockfiles or large files."
  '(indent-tabs-mode nil)
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
-   '(posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
+   '(yaml-mode posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
  '(tab-width 4))
 
 (custom-set-faces
