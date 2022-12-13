@@ -559,6 +559,9 @@ lockfiles or large files."
   :commands yas-minor-mode
   :hook ((lsp-mode . yas-minor-mode)))
 
+(defun file-is-react ()
+  "Return non-nil if this is a file with react jsx or tsx."
+  (string-match "\\.[jt]sx\\'" buffer-file-name))
 ;;; Language servers
 (use-package lsp-mode
   :ensure t
@@ -566,7 +569,7 @@ lockfiles or large files."
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-enable-dap-auto-configure nil)
-
+  (lsp-idle-delay 0.25)
   (lsp-vetur-use-workspace-dependencies t)
   (lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
   (lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
@@ -579,9 +582,12 @@ lockfiles or large files."
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
-  :hook ((lsp-mode . (lambda () (lsp-enable-which-key-integration t)))
+  :hook ((lsp-mode . lsp-enable-which-key-integration)
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)
+         (typescript-mode . lsp)
+         (js2-mode . lsp)
+         (web-mode . (lambda() (when (file-is-react) (lsp))))
          (go-mode . lsp)))
 
 (use-package lsp-ui
@@ -721,11 +727,9 @@ lockfiles or large files."
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'")
 
-(defun file-is-react ()
-  "Return non-nil if this is a file with react jsx or tsx."
-  (string-match "\\.[jt]sx\\'" buffer-file-name))
 (use-package tide
   :ensure t
+  :disabled
   :after (:any typescript-mode js2-mode)
   :preface
   (defun setup-tide-mode ()
@@ -795,9 +799,7 @@ lockfiles or large files."
            (web-mode-enable-current-element-highlight t)
            (web-mode-markup-indent-offset 2))
   :mode (("\\.html?\\'" . web-mode)
-         ("\\.[jt]sx\\'" . web-mode))
-  :config
-  (add-hook 'web-mode-hook (lambda() (when (file-is-react) (setup-tide-mode)))))
+         ("\\.[jt]sx\\'" . web-mode)))
 
 
 ;;;;;;;;;;;;;;;;;;
