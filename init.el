@@ -571,8 +571,6 @@ lockfiles or large files."
   (lsp-enable-dap-auto-configure nil)
   (lsp-idle-delay 0.25)
   (lsp-vetur-use-workspace-dependencies t)
-  (lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
-  (lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
 
   ;; vls is pretty slow so disable live reporting
   (lsp-ui-flycheck-live-reporting nil)
@@ -752,7 +750,6 @@ lockfiles or large files."
   :custom
   (tide-server-max-response-length (* 3 1024 1024))
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
-  (tide-format-options '(:insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil))
   ;; tide upstream has this disabled for now
   (tide-native-json-parsing (and (>= emacs-major-version 27)
                                  (functionp 'json-serialize)
