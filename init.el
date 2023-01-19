@@ -257,7 +257,7 @@ lockfiles or large files."
                             ;;(> (line-number-at-pos (point-max)) 5000))
                             (when (> (buffer-size) large-buffer)
                               (display-line-numbers-mode -1)
-                              (linum-mode -1)
+                              (display-line-numbers-mode -1)
                               (font-lock-mode -1))))
 
 
@@ -783,6 +783,10 @@ lockfiles or large files."
 
 (use-package web-mode
   :ensure t
+  :preface
+  ; web-mode needs linum-mode to exist, which was removed in emacs 29
+  (unless (fboundp 'linum-mode)
+    (defun linum-mode ()))
   :custom ((web-mode-auto-close-style 2)
            (web-mode-code-indent-offset 2)
            (web-mode-css-indent-offset 2)
