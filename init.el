@@ -270,7 +270,7 @@ lockfiles or large files."
 ;; these cause annoying rebuilds with webpack when a dir is being watched
 (setq create-lockfiles nil)
 ;; helps with lsp-mode performance. requires emacs >=27
-(setq read-process-output-max (* 1024 1024))
+(setq read-process-output-max (* 3 1024 1024))
 
 (global-set-key [f5] (defun my/force-revert-buffer () (interactive) (revert-buffer nil t)))
 (make-variable-buffer-local 'compile-command)
@@ -569,13 +569,14 @@ lockfiles or large files."
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-enable-dap-auto-configure nil)
-  (lsp-idle-delay 0.25)
+  (lsp-idle-delay 0.5)
   (lsp-vetur-use-workspace-dependencies t)
 
   ;; vls is pretty slow so disable live reporting
   (lsp-ui-flycheck-live-reporting nil)
   (lsp-flycheck-live-reporting nil)
   (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
+  (lsp-eldoc-render-all t)
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
