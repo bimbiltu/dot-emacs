@@ -412,15 +412,14 @@ lockfiles or large files."
   :config (counsel-mode 1))
 
 (use-package recentf
+  :init
+  (add-hook 'kill-emacs-hook 'recentf-cleanup)
+  (bind-key "C-x C-r" 'counsel-recentf)
   :custom
   (recentf-max-saved-items 200)
   (recentf-max-menu-items 0)
   (recentf-auto-cleanup 'never)
-  (recentf-filename-handlers '(substring-no-properties abbreviate-file-name))
-  :config
-  (add-hook 'kill-emacs-hook 'recentf-cleanup)
-  (recentf-mode +1)
-  :bind ("C-x C-r" . counsel-recentf))
+  (recentf-filename-handlers '(substring-no-properties abbreviate-file-name)))
 
 (use-package magit
   :commands magit-status
