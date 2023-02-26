@@ -286,7 +286,7 @@ lockfiles or large files."
   (load (concat user-emacs-directory "so-long.el") nil t))
 (use-package so-long
   :custom
-  (so-long-threshold 500)
+  (so-long-threshold 1000)
   :config (global-so-long-mode))
 (use-package paren
   :custom
