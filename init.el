@@ -451,6 +451,22 @@ lockfiles or large files."
 ;; Config For prog modes    ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package treesit
+  :custom
+  (treesit-language-source-alist
+   '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
+     (c . ("https://github.com/tree-sitter/tree-sitter-c"))
+     (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+     (css . ("https://github.com/tree-sitter/tree-sitter-css"))
+     (go . ("https://github.com/tree-sitter/tree-sitter-go"))
+     (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+     (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
+     (json . ("https://github.com/tree-sitter/tree-sitter-json"))
+     (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+     (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "typescript/src" "typescript"))
+     (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "tsx/src" "tsx"))
+     (sql . ("https://github.com/m-novikov/tree-sitter-sql")))))
+
 (use-package markdown-mode
   :ensure t
   :custom
@@ -582,6 +598,7 @@ lockfiles or large files."
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)
          (typescript-mode . lsp)
+         (tsx-ts-mode . lsp)
          (js2-mode . lsp)
          (web-mode . (lambda() (when (file-is-react) (lsp))))
          (go-mode . lsp)))
@@ -723,6 +740,10 @@ lockfiles or large files."
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'")
 
+; TODO: look at https://github.com/orzechowskid/tsx-mode.el
+(use-package tsx-ts-mode
+  :mode "\\.[jt]sx\\'")
+
 (use-package tide
   :ensure t
   :disabled
@@ -797,8 +818,7 @@ lockfiles or large files."
            (web-mode-enable-current-column-highlight t)
            (web-mode-enable-current-element-highlight t)
            (web-mode-markup-indent-offset 2))
-  :mode (("\\.html?\\'" . web-mode)
-         ("\\.[jt]sx\\'" . web-mode)))
+  :mode (("\\.html?\\'" . web-mode)))
 
 
 ;;;;;;;;;;;;;;;;;;
