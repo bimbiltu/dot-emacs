@@ -409,7 +409,6 @@ lockfiles or large files."
     '("." "-type" "d" "(" "-name" "node_modules" "-o" "-name" "bower_components"
       "-o" "-name" ".git" "-o" "-name" "gemini" "-o" "-name" "tsout"
       "-o" "-name" "dist" "-o" "-false" ")" "-prune" "-false" "-o" "-type" "f")))
-  ;;:bind ("M-x" . counsel-M-x)
   :config (counsel-mode 1))
 
 (use-package recentf
@@ -483,7 +482,7 @@ lockfiles or large files."
   :custom
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
-  (flycheck-idle-change-delay 3)
+  (flycheck-idle-change-delay 1)
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
   :init
@@ -509,7 +508,7 @@ lockfiles or large files."
   This lets us fix any errors as quickly as possible, but in a
   clean buffer we're an order of magnitude laxer about checking."
     (setq flycheck-idle-change-delay
-          (if flycheck-current-errors 0.25 3.0)))
+          (if flycheck-current-errors 0.25 1)))
 
   ;; Each buffer gets its own idle-change-delay because of the
   ;; buffer-sensitive adjustment above.
@@ -518,8 +517,8 @@ lockfiles or large files."
   ; Modify built in checkers to run on other modes
   (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-  (add-hook 'flycheck-after-syntax-check-hook
-            'magnars/adjust-flycheck-automatic-syntax-eagerness)
+  ;(add-hook 'flycheck-after-syntax-check-hook
+  ;          'magnars/adjust-flycheck-automatic-syntax-eagerness)
   (global-flycheck-mode))
 
 
@@ -571,10 +570,8 @@ lockfiles or large files."
   (lsp-enable-dap-auto-configure nil)
   (lsp-idle-delay 0.5)
   (lsp-vetur-use-workspace-dependencies t)
+  (lsp-headerline-breadcrumb-enable nil)
 
-  ;; vls is pretty slow so disable live reporting
-  (lsp-ui-flycheck-live-reporting nil)
-  (lsp-flycheck-live-reporting nil)
   (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   (lsp-eldoc-render-all t)
   :config
@@ -751,7 +748,7 @@ lockfiles or large files."
   :custom
   (tide-server-max-response-length (* 3 1024 1024))
   (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
-  ;; tide upstream has this disabled for now
+  ;; tide upstream has this disabled, so conditionally enable it
   (tide-native-json-parsing (and (>= emacs-major-version 27)
                                  (functionp 'json-serialize)
                                  (functionp 'json-parse-buffer)
