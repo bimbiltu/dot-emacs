@@ -531,6 +531,8 @@ lockfiles or large files."
 
   ; Modify built in checkers to run on other modes
   (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'tsx-ts-mode)
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
 
   ;(add-hook 'flycheck-after-syntax-check-hook
   ;          'magnars/adjust-flycheck-automatic-syntax-eagerness)
@@ -586,6 +588,8 @@ lockfiles or large files."
   (lsp-idle-delay 0.5)
   (lsp-vetur-use-workspace-dependencies t)
   (lsp-headerline-breadcrumb-enable nil)
+  ;; creates file watchers on every directory in every project..
+  (lsp-eslint-enable nil)
 
   (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   (lsp-eldoc-render-all t)
@@ -594,6 +598,7 @@ lockfiles or large files."
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
   :hook ((lsp-mode . lsp-enable-which-key-integration)
+         (lsp-managed-mode . (lambda() (flycheck-add-next-checker 'lsp 'javascript-eslint)))
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)
          (typescript-mode . lsp)
