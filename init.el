@@ -606,6 +606,8 @@ lockfiles or large files."
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)
          (typescript-mode . lsp)
+         (typescript-ts-mode . lsp)
+         (js-ts-mode . lsp)
          (tsx-ts-mode . lsp)
          (js2-mode . lsp)
          (web-mode . (lambda() (when (file-is-react) (lsp))))
