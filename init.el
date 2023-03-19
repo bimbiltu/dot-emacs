@@ -497,7 +497,7 @@ lockfiles or large files."
   :custom
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
-  (flycheck-idle-change-delay 1)
+  (flycheck-idle-change-delay 2)
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
   :init
@@ -523,7 +523,7 @@ lockfiles or large files."
   This lets us fix any errors as quickly as possible, but in a
   clean buffer we're an order of magnitude laxer about checking."
     (setq flycheck-idle-change-delay
-          (if flycheck-current-errors 0.25 1)))
+          (if flycheck-current-errors 0.25 2)))
 
   ;; Each buffer gets its own idle-change-delay because of the
   ;; buffer-sensitive adjustment above.
@@ -534,8 +534,8 @@ lockfiles or large files."
   (flycheck-add-mode 'javascript-eslint 'tsx-ts-mode)
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
 
-  ;(add-hook 'flycheck-after-syntax-check-hook
-  ;          'magnars/adjust-flycheck-automatic-syntax-eagerness)
+  (add-hook 'flycheck-after-syntax-check-hook
+            'magnars/adjust-flycheck-automatic-syntax-eagerness)
   (global-flycheck-mode))
 
 
@@ -585,7 +585,7 @@ lockfiles or large files."
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-enable-dap-auto-configure nil)
-  (lsp-idle-delay 0.5)
+  (lsp-idle-delay 0.25)
   (lsp-vetur-use-workspace-dependencies t)
   (lsp-headerline-breadcrumb-enable nil)
   ;; creates file watchers on every directory in every project..
