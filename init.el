@@ -746,7 +746,7 @@ lockfiles or large files."
 (use-package typescript-mode
   :ensure t
   :custom (typescript-indent-level 2)
-  :mode "\\.ts\\'")
+  :mode "\\.ts\\'" "\\.mjs\\'")
 
 ; TODO: look at https://github.com/orzechowskid/tsx-mode.el
 (use-package tsx-ts-mode
