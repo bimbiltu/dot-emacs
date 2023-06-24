@@ -738,21 +738,6 @@ lockfiles or large files."
   (vue-html-extra-indent 2)
   :mode "\\.vue\\'")
 
-(use-package js2-mode
-  :ensure t
-  :custom
-  ((js-chain-indent nil)
-   (js-enabled-frameworks (quote (javascript prototype)))
-   (js-indent-level 2)
-   (js2-allow-rhino-new-expr-initializer nil)
-   (js2-concat-multiline-strings (quote eol))
-   (js2-highlight-external-variables nil)
-   (js2-include-node-externs t)
-   (js2-mode-assume-strict t)
-   (js2-strict-inconsistent-return-warning nil)
-   (js2-strict-trailing-comma-warning nil))
-  :mode "\\.js\\'")
-
 (use-package json-mode
   :ensure t
   :pin gnu
@@ -782,13 +767,37 @@ lockfiles or large files."
   :ensure t
   :mode "\\.go\\'")
 
+(use-package js2-mode
+  :ensure t
+  :custom
+  ((js-chain-indent nil)
+   (js-enabled-frameworks (quote (javascript prototype)))
+   (js-indent-level 2)
+   (js2-allow-rhino-new-expr-initializer nil)
+   (js2-concat-multiline-strings (quote eol))
+   (js2-highlight-external-variables nil)
+   (js2-include-node-externs t)
+   (js2-mode-assume-strict t)
+   (js2-strict-inconsistent-return-warning nil)
+   (js2-strict-trailing-comma-warning nil))
+  :mode "\\.js\\'")
+
 (use-package typescript-mode
   :ensure t
+  :diminish "TS"
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'" "\\.mjs\\'")
 
+(use-package typescript-ts-mode
+  :ensure t
+  :disabled
+  :diminish "TS"
+  :custom (typescript-indent-level 2)
+  :mode "\\.ts\\'")
+
 ; TODO: look at https://github.com/orzechowskid/tsx-mode.el
 (use-package tsx-ts-mode
+  :diminish "TSX"
   :mode "\\.[jt]sx\\'")
 
 (use-package tide
