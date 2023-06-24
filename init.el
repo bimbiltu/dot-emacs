@@ -582,6 +582,33 @@ lockfiles or large files."
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :preface
+  (defun lsp-js-ts-rename-file ()
+    "Rename current file and all it's references in other files."
+    (interactive)
+    (let* ((name (buffer-name))
+           (old (buffer-file-name))
+           (basename (file-name-nondirectory old)))
+      (unless (and old (file-exists-p old))
+        (error "Buffer '%s' is not visiting a file" name))
+      (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
+        (when (get-file-buffer new)
+          (error "A buffer named '%s' already exists" new))
+        (when (file-exists-p new)
+          (error "A file named '%s' already exists" new))
+        (lsp--send-execute-command
+         "_typescript.applyRenameFile"
+         (vector (list :sourceUri (lsp--buffer-uri)
+                       :targetUri (lsp--path-to-uri new))))
+        (mkdir (file-name-directory new) t)
+        (rename-file old new)
+        (rename-buffer new)
+        (set-visited-file-name new)
+        (set-buffer-modified-p nil)
+        (lsp-disconnect)
+        (setq-local lsp-buffer-uri nil)
+        (lsp)
+        (lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new)))))
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-enable-dap-auto-configure nil)
@@ -590,6 +617,7 @@ lockfiles or large files."
   (lsp-headerline-breadcrumb-enable nil)
   ;; creates file watchers on every directory in every project..
   (lsp-eslint-enable nil)
+  (lsp-signature-render-documentation nil)
 
   (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   (lsp-eldoc-render-all t)
@@ -597,12 +625,16 @@ lockfiles or large files."
   (lsp-clients-clangd-executable "clangd-11")
   (lsp-clients-clangd-args '("--suggest-missing-includes"))
 
+  (lsp-clients-typescript-prefer-use-project-ts-server nil)
+
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; TODO: look into using lsp for other modes like js2, typescript, json to start
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
   :hook ((lsp-mode . lsp-enable-which-key-integration)
-         (lsp-managed-mode . (lambda() (flycheck-add-next-checker 'lsp 'javascript-eslint)))
+         ;; eslint is too slow, parses entire project. Much better to use the LSP client, except
+         ;; that sets up a watcher on everything in projectile for some reason
+         ;; (lsp-managed-mode . (lambda() (flycheck-add-next-checker 'lsp 'javascript-eslint)))
          ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)
          (typescript-mode . lsp)
@@ -612,6 +644,11 @@ lockfiles or large files."
          (js2-mode . lsp)
          (web-mode . (lambda() (when (file-is-react) (lsp))))
          (go-mode . lsp)))
+
+(use-package lsp-ivy
+  :ensure t
+  :disabled
+  :commands lsp-ivy-workspace-symbol)
 
 (use-package lsp-ui
   :ensure t
