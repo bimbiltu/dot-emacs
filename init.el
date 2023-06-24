@@ -49,7 +49,9 @@
 (use-package bind-key
   :ensure t)
 (use-package diminish
-  :ensure t)
+  :ensure t
+  :config
+  (diminish 'eldoc-mode))
 (use-package doom-themes
   :ensure t
   :init
@@ -451,6 +453,7 @@ lockfiles or large files."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package treesit
+  :diminish '(typescript-ts-mode . "TS")
   :custom
   (treesit-language-source-alist
    '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
@@ -572,6 +575,8 @@ lockfiles or large files."
 
 (use-package yasnippet
   :ensure t
+  :diminish
+  :disabled
   :commands yas-minor-mode
   :hook ((lsp-mode . yas-minor-mode)))
 
