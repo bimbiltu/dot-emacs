@@ -414,13 +414,15 @@ lockfiles or large files."
 
 (use-package recentf
   :init
-  (add-hook 'kill-emacs-hook 'recentf-cleanup)
+  ;(add-hook 'kill-emacs-hook 'recentf-cleanup)
   (bind-key "C-x C-r" 'counsel-recentf)
+  :defer 2
   :custom
   (recentf-max-saved-items 200)
   (recentf-max-menu-items 0)
-  (recentf-auto-cleanup 'never)
-  (recentf-filename-handlers '(substring-no-properties abbreviate-file-name)))
+  (recentf-auto-cleanup 10)
+  (recentf-filename-handlers '(substring-no-properties abbreviate-file-name))
+  :config (recentf-mode 1))
 
 (use-package magit
   :commands magit-status
