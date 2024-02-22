@@ -789,13 +789,13 @@ lockfiles or large files."
 
 (use-package typescript-mode
   :ensure t
+  :disabled
   :diminish "TS"
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'" "\\.mjs\\'")
 
 (use-package typescript-ts-mode
   :ensure t
-  :disabled
   :diminish "TS"
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'")
