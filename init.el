@@ -90,19 +90,6 @@
 (defconst macos-zsh "/bin/zsh")
 (defconst macos-shell-to-use macos-zsh)
 (defconst gitbash-shell "C:\\Program Files\\Git\\bin\\bash.exe")
-
-;; set $PATH according to my shell (including .profile) when launching GUI emacs
-;; This doesn't seem necessary on my linux mint system but can add 'x to the list
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
-  :ensure t
-  :custom
-  (exec-path-from-shell-arguments '("-l"))
-  :config
-  (add-to-list 'exec-path-from-shell-variables "GOPATH")
-  (add-to-list 'exec-path-from-shell-variables "GOPRIVATE")
-  (exec-path-from-shell-initialize))
-
 (when (eq system-type 'darwin)
   (let* ((gls-exec (executable-find "gls")))
     (when gls-exec (setq insert-directory-program gls-exec)))
@@ -119,6 +106,17 @@
   ;; (shell-command-to-string (concat find-program " " counsel-file-jump-args)))
   (setq shell-file-name gitbash-shell))
 
+;; set $PATH according to my shell (including .profile) when launching GUI emacs
+;; This doesn't seem necessary on my linux mint system but can add 'x to the list
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :ensure t
+  :custom
+  (exec-path-from-shell-arguments '("-l"))
+  :config
+  (add-to-list 'exec-path-from-shell-variables "GOPATH")
+  (add-to-list 'exec-path-from-shell-variables "GOPRIVATE")
+  (exec-path-from-shell-initialize))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; define some globals ;;
