@@ -286,7 +286,7 @@ lockfiles or large files."
   (load (concat user-emacs-directory "so-long.el") nil t))
 (use-package so-long
   :custom
-  (so-long-threshold 1000)
+  (so-long-threshold 3000)
   :config (global-so-long-mode))
 (use-package paren
   :custom
@@ -404,7 +404,8 @@ lockfiles or large files."
   :after ivy
   :diminish
   :custom
-  ((counsel-find-file-at-point t)
+  ; I tend to author code using import aliases, so this wrong more often than not now
+  ((counsel-find-file-at-point nil)
    (counsel-file-jump-args
     '("." "-type" "d" "(" "-name" "node_modules" "-o" "-name" "bower_components"
       "-o" "-name" ".git" "-o" "-name" "gemini" "-o" "-name" "tsout"
@@ -426,6 +427,8 @@ lockfiles or large files."
   :ensure t
   :config
   (put 'magit-diff-edit-hunk-commit 'disabled nil)
+  :custom
+  (magit-refresh-status-buffer nil)
   :bind ("C-x g" . 'magit-status))
 
 (use-package forge
@@ -551,7 +554,8 @@ lockfiles or large files."
 
 (use-package prettier-js
   :ensure t
-  :commands (prettier-js prettier-js-mode))
+  :commands (prettier-js prettier-js-mode)
+  :bind ("C-c C-p" . prettier-js))
 
 (use-package company
   :ensure t
