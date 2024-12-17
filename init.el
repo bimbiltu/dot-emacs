@@ -494,7 +494,7 @@ lockfiles or large files."
 (use-package npm-bin-utils
   :commands (npm-bin-utils-add-to-path npm-bin-utils-find))
 
-;; load flycheck after 3s idle or on first save. still deciding if I like this vs just starting immediately
+;; load flycheck after 1s idle or on first save. still deciding if I like this vs just starting immediately
 ;; a lot of this is copied from https://github.com/jwiegley/dot-emacs/blob/master/init.el
 (use-package flycheck
   :ensure t
@@ -503,7 +503,7 @@ lockfiles or large files."
   :custom
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
-  (flycheck-idle-change-delay 2)
+  (flycheck-idle-change-delay 1)
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
   :init
@@ -527,9 +527,9 @@ lockfiles or large files."
   (defun magnars/adjust-flycheck-automatic-syntax-eagerness ()
     "Adjust how often we check for errors based on if there are any.
   This lets us fix any errors as quickly as possible, but in a
-  clean buffer we're an order of magnitude laxer about checking."
+  clean buffer we're much laxer about checking."
     (setq flycheck-idle-change-delay
-          (if flycheck-current-errors 0.25 2)))
+          (if flycheck-current-errors 0.5 1)))
 
   ;; Each buffer gets its own idle-change-delay because of the
   ;; buffer-sensitive adjustment above.
@@ -592,32 +592,38 @@ lockfiles or large files."
   :ensure t
   :commands lsp
   :preface
-  (defun lsp-js-ts-rename-file ()
-    "Rename current file and all it's references in other files."
-    (interactive)
-    (let* ((name (buffer-name))
-           (old (buffer-file-name))
-           (basename (file-name-nondirectory old)))
-      (unless (and old (file-exists-p old))
-        (error "Buffer '%s' is not visiting a file" name))
-      (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
-        (when (get-file-buffer new)
-          (error "A buffer named '%s' already exists" new))
-        (when (file-exists-p new)
-          (error "A file named '%s' already exists" new))
-        (lsp--send-execute-command
-         "_typescript.applyRenameFile"
-         (vector (list :sourceUri (lsp--buffer-uri)
-                       :targetUri (lsp--path-to-uri new))))
-        (mkdir (file-name-directory new) t)
-        (rename-file old new)
-        (rename-buffer new)
-        (set-visited-file-name new)
-        (set-buffer-modified-p nil)
-        (lsp-disconnect)
-        (setq-local lsp-buffer-uri nil)
-        (lsp)
-        (lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new)))))
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; for check lsp-server-present?
+               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))  ;; native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+              (setcar orig-result command-from-exec-path))
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+  :init
+  (advice-add (if (progn (require 'json)
+                         (fboundp 'json-parse-buffer))
+                  'json-parse-buffer
+                'json-read)
+              :around
+              #'lsp-booster--advice-json-parse)
+  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-enable-dap-auto-configure nil)
@@ -635,6 +641,8 @@ lockfiles or large files."
   (lsp-clients-clangd-args '("--suggest-missing-includes"))
 
   (lsp-clients-typescript-prefer-use-project-ts-server nil)
+  (lsp-clients-typescript-max-ts-server-memory 8192)
+
 
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
@@ -796,13 +804,13 @@ lockfiles or large files."
   :disabled
   :diminish "TS"
   :custom (typescript-indent-level 2)
-  :mode "\\.ts\\'" "\\.mjs\\'")
+  :mode "\\.ts\\'" "\\.mjs\\'" "\\.cjs\\'")
 
 (use-package typescript-ts-mode
   :ensure t
   :diminish "TS"
   :custom (typescript-indent-level 2)
-  :mode "\\.ts\\'")
+  :mode "\\.ts\\'" "\\.mjs\\'" "\\.cjs\\'")
 
 ; TODO: look at https://github.com/orzechowskid/tsx-mode.el
 (use-package tsx-ts-mode
@@ -905,15 +913,16 @@ lockfiles or large files."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(company-show-quick-access t nil nil "Customized with use-package company")
  '(compilation-always-kill t)
  '(compilation-read-command nil)
- '(compile-command "yarn build")
+ '(compile-command "npx tsc")
  '(css-indent-offset 2)
  '(fill-column 120)
  '(indent-tabs-mode nil)
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
-   '(yaml-mode posframe dap-mode web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode lsp-ui lsp-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
+   '(yaml-mode posframe web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
  '(tab-width 4))
 
 (custom-set-faces
