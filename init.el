@@ -924,6 +924,11 @@ lockfiles or large files."
  '(mmm-submode-decoration-level 0)
  '(package-selected-packages
    '(yaml-mode posframe web-mode tide typescript-mode company-tern tern json-mode js2-mode vue-mode scss-mode yasnippet company prettier-js flycheck-popup-tip flycheck git-timemachine forge magit hl-todo ace-jump-mode counsel-projectile projectile iedit wgrep keyfreq exec-path-from-shell diminish use-package))
+ '(safe-local-variable-values
+   '((eval remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff)
+     (eval remove-hook 'server-switch-hook 'magit-commit-diff)
+     (eval magit-disable-section-inserter 'magit-insert-tags-header)
+     (eval magit-disable-section-inserter 'magit-insert-status-headers)))
  '(tab-width 4))
 
 (custom-set-faces
