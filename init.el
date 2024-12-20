@@ -659,6 +659,7 @@ lockfiles or large files."
          (js-ts-mode . lsp)
          (tsx-ts-mode . lsp)
          (js2-mode . lsp)
+         (ruby-mode . lsp)
          (web-mode . (lambda() (when (file-is-react) (lsp))))
          (go-mode . lsp)))
 
