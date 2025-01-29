@@ -424,6 +424,16 @@ lockfiles or large files."
   (recentf-filename-handlers '(substring-no-properties abbreviate-file-name))
   :config (recentf-mode 1))
 
+;; dir-locals for better perf in big repos:
+;; ((magit-status-mode
+;;   . (
+;;      (eval . (magit-disable-section-inserter 'magit-insert-tags-header))
+;;      (eval . (magit-disable-section-inserter 'magit-insert-status-headers))
+;;      ;; (eval . (magit-disable-section-inserter 'magit-insert-stashes))
+;;      ;; (eval . (magit-disable-section-inserter 'forge-insert-pullreqs))
+;;      (eval . (remove-hook 'server-switch-hook 'magit-commit-diff))
+;;      (eval . (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
+;;      )))
 (use-package magit
   :commands magit-status
   :ensure t
