@@ -628,6 +628,7 @@ lockfiles or large files."
 
   :custom
   (lsp-keymap-prefix "C-c l")
+  (lsp-enable-snippet nil)
   (lsp-enable-dap-auto-configure nil)
   (lsp-idle-delay 0.25)
   (lsp-vetur-use-workspace-dependencies t)
