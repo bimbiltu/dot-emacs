@@ -629,6 +629,7 @@ lockfiles or large files."
   (lsp-eslint-enable nil)
   (lsp-signature-render-documentation nil)
   (lsp-eldoc-render-all t)
+  (lsp-auto-execute-action nil)
 
   ;; language server settings
   (lsp-clients-clangd-executable "clangd-11")
