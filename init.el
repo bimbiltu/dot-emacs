@@ -357,17 +357,6 @@ lockfiles or large files."
 ;; setup counsel, source control ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: remove when https://github.com/magit/forge/issues/91 is resolved
-(use-package browse-at-remote
-  :ensure t
-  :config
-  ;; from secrets.el
-  ;; can also git config --add browseAtRemote.type "github"
-  (when (boundp 'company-github-url)
-    (push (cons company-github-url "github")
-          browse-at-remote-remote-type-domains))
-  :bind ("C-c B" . browse-at-remote))
-
 (use-package projectile
   :ensure t
   :diminish "proj"
@@ -452,6 +441,7 @@ lockfiles or large files."
   :custom
   (forge-topic-list-limit (quote (20 . 0)))
   (forge-pull-notifications nil)
+  :bind ("C-c B" . browse-at-remote)
   :config
   ;; '(git hostname, api endpont, id typically hostname, repo class ex forge-github-repository)
   (when (boundp 'private-forge-alist) (add-to-list 'forge-alist private-forge-alist)))
@@ -550,6 +540,7 @@ lockfiles or large files."
 
   ; Modify built in checkers to run on other modes
   (flycheck-add-mode 'javascript-eslint 'tsx-ts-mode)
+  (flycheck-add-mode 'javascript-eslint 'typescript-ts-mode)
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
 
   (add-hook 'flycheck-after-syntax-check-hook
@@ -560,7 +551,6 @@ lockfiles or large files."
 ;; This or flycheck-pos-tip?
 (use-package flycheck-popup-tip
   :ensure t
-  :disabled
   :commands flycheck-popup-tip-mode
   :after flycheck
   :hook ((flycheck-mode . flycheck-popup-tip-mode))
@@ -588,6 +578,9 @@ lockfiles or large files."
   (company-tooltip-flip-when-above t)
   (company-selection-wrap-around t)
   :hook ((tern-mode typescript-mode) . company-mode))
+
+(use-package yasnippet
+  :ensure t)
 
 ;;; Language servers
 (use-package lsp-mode
@@ -628,7 +621,6 @@ lockfiles or large files."
 
   :custom
   (lsp-keymap-prefix "C-c l")
-  (lsp-enable-snippet nil)
   (lsp-enable-dap-auto-configure nil)
   (lsp-idle-delay 0.25)
   (lsp-vetur-use-workspace-dependencies t)
@@ -636,8 +628,6 @@ lockfiles or large files."
   ;; creates file watchers on every directory in every project..
   (lsp-eslint-enable nil)
   (lsp-signature-render-documentation nil)
-
-  (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   (lsp-eldoc-render-all t)
 
   ;; language server settings
@@ -697,6 +687,7 @@ lockfiles or large files."
 ;; TODO: set up more environments
 (use-package dap-mode
   :ensure t
+  :disabled
   :commands dap-mode
   :config
    (defun setup-dap-mode ()
@@ -806,14 +797,14 @@ lockfiles or large files."
   :diminish "TS"
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'" "\\.mjs\\'" "\\.cjs\\'")
-
+;; Prefer tree sitter for typescript
 (use-package typescript-ts-mode
   :ensure t
   :diminish "TS"
   :custom (typescript-indent-level 2)
   :mode "\\.ts\\'" "\\.mjs\\'" "\\.cjs\\'")
 
-; TODO: look at https://github.com/orzechowskid/tsx-mode.el
+;; Interesting alternative https://github.com/orzechowskid/tsx-mode.el
 (use-package tsx-ts-mode
   :diminish "TSX"
   :mode "\\.[jt]sx\\'")
