@@ -61,22 +61,6 @@
 (use-package f
   :ensure t)
 
-;; https://github.com/hlissner/doom-emacs/issues/2194
-;; underline cant be a different color than the foreground on terminal
-;; set foreground color to red on terminals to compensate
-;; This doesnt take into account emacs running with frames both in the
-;; terminal and GUI but im not worried about that situation.
-;; https://stackoverflow.com/a/5801740
-;; TODO: fix multi line errors not showing anything in terminal
-;; this was changed as a result of https://github.com/flycheck/flycheck/issues/1730
-(add-hook 'flycheck-mode-hook
-          (defun fix-flycheck-error-face ()
-            (unless window-system
-              (set-face-attribute 'flycheck-error nil :foreground "red")
-              (set-face-attribute 'flycheck-warning nil :foreground "yellow")
-              (set-face-attribute 'flycheck-info nil :foreground "yellow"))))
-
-
 (add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
 (let ((secrets-file (concat user-emacs-directory "secrets.el")))
   (when (file-readable-p secrets-file) (load secrets-file nil t)))
@@ -125,7 +109,6 @@
 ;; This is not necessarially covered by so-long because those files might not have long lines
 (defconst large-buffer (* 500 1000))
 ;; used to track when vue-mode is enabled
-(defvar-local vue-mode-p nil)
 (defvar-local large-buffer-p nil)
 (add-hook 'prog-mode-hook (defun my-check-buffer-size ()
                             (when (> (buffer-size) large-buffer)
@@ -301,7 +284,7 @@ lockfiles or large files."
   :custom
   ;; Make exiting emacs fast on NFS
   (save-place-forget-unreadable-files nil)
-  (save-place-limit 200))
+  (save-place-limit 300))
 (use-package savehist
   :config
   (savehist-mode 1))
@@ -507,6 +490,11 @@ lockfiles or large files."
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
   (flycheck-idle-change-delay 1)
+  ;; TODO: experiemnt with this and come up with something that works in a terminal
+  ;; Maybe change the delimited error face, or use a text based delimiter when window-system?
+  ;; Possible delimiters: →← »«
+  ;; https://github.com/flycheck/flycheck/issues/1730
+  ;;(flycheck-highlighting-style '(delimiters "a" "b"))
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
   :init
@@ -545,6 +533,18 @@ lockfiles or large files."
 
   (add-hook 'flycheck-after-syntax-check-hook
             'magnars/adjust-flycheck-automatic-syntax-eagerness)
+  ;; https://github.com/hlissner/doom-emacs/issues/2194
+  ;; underline cant be a different color than the foreground on terminal
+  ;; set foreground color to red on terminals to compensate
+  ;; This doesnt take into account emacs running with frames both in the
+  ;; terminal and GUI but im not worried about that situation.
+  ;; https://stackoverflow.com/a/5801740
+  (add-hook 'flycheck-mode-hook
+            (defun fix-flycheck-error-face ()
+              (unless window-system
+                (set-face-attribute 'flycheck-error nil :foreground "red")
+                (set-face-attribute 'flycheck-warning nil :foreground "yellow")
+                (set-face-attribute 'flycheck-info nil :foreground "yellow"))))
   (global-flycheck-mode))
 
 
@@ -740,8 +740,6 @@ lockfiles or large files."
 
 (use-package vue-mode
   :ensure t
-  :config
-  (add-hook 'vue-mode-hook (lambda () (setq vue-mode-p (not vue-mode-p))))
   :custom
   (vue-dedicated-modes '(js-mode js2-mode))
   (vue-html-extra-indent 2)
