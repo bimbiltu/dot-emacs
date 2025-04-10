@@ -549,7 +549,6 @@ lockfiles or large files."
   (make-variable-buffer-local 'flycheck-idle-change-delay)
 
   ; Modify built in checkers to run on other modes
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
   (flycheck-add-mode 'javascript-eslint 'tsx-ts-mode)
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
 
@@ -590,16 +589,6 @@ lockfiles or large files."
   (company-selection-wrap-around t)
   :hook ((tern-mode typescript-mode) . company-mode))
 
-(use-package yasnippet
-  :ensure t
-  :diminish
-  :disabled
-  :commands yas-minor-mode
-  :hook ((lsp-mode . yas-minor-mode)))
-
-(defun file-is-react ()
-  "Return non-nil if this is a file with react jsx or tsx."
-  (string-match "\\.[jt]sx\\'" buffer-file-name))
 ;;; Language servers
 (use-package lsp-mode
   :ensure t
@@ -650,22 +639,20 @@ lockfiles or large files."
   (lsp-prefer-capf t) ;; not necessary if company-lsp is uninstalled
   (lsp-eldoc-render-all t)
 
+  ;; language server settings
   (lsp-clients-clangd-executable "clangd-11")
   (lsp-clients-clangd-args '("--suggest-missing-includes"))
 
   (lsp-clients-typescript-prefer-use-project-ts-server nil)
   (lsp-clients-typescript-max-ts-server-memory 8192)
 
-
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
-  ;; TODO: look into using lsp for other modes like js2, typescript, json to start
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
   :hook ((lsp-mode . lsp-enable-which-key-integration)
          ;; eslint is too slow, parses entire project. Much better to use the LSP client, except
          ;; that sets up a watcher on everything in projectile for some reason
          ;; (lsp-managed-mode . (lambda() (flycheck-add-next-checker 'lsp 'javascript-eslint)))
-         ;; TODO: maybe make company results filter based on prefix rather than fuzzy matching?
          (vue-mode . lsp)
          (typescript-mode . lsp)
          (typescript-ts-mode . lsp)
@@ -673,7 +660,6 @@ lockfiles or large files."
          (tsx-ts-mode . lsp)
          (js2-mode . lsp)
          (ruby-mode . lsp)
-         (web-mode . (lambda() (when (file-is-react) (lsp))))
          (go-mode . lsp)))
 
 (use-package lsp-ivy
@@ -831,62 +817,6 @@ lockfiles or large files."
   :diminish "TSX"
   :mode "\\.[jt]sx\\'")
 
-(use-package tide
-  :ensure t
-  :disabled
-  :after (:any typescript-mode js2-mode)
-  :preface
-  (defun setup-tide-mode ()
-    "Setup tide."
-    (tide-setup)
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    (company-mode +1))
-  (defun teardown-tide-mode ()
-    "Teardown tide."
-    (company-mode -1)
-    (tide-hl-identifier-mode -1)
-    (eldoc-mode -1)
-    (tide-mode -1))
-  (defun is-ts-file ()
-    "Return t if the buffer is for a .ts file."
-    (and
-     (stringp buffer-file-name) ;; required for vue files to get syntax highlighting in ts scripts
-     (string-match "\\.ts\\'" buffer-file-name)))
-  :custom
-  (tide-server-max-response-length (* 3 1024 1024))
-  (tide-tsserver-locator-function (lambda() (npm-bin-utils-find "tsserver")))
-  ;; tide upstream has this disabled, so conditionally enable it
-  (tide-native-json-parsing (and (>= emacs-major-version 27)
-                                 (functionp 'json-serialize)
-                                 (functionp 'json-parse-buffer)
-                                 (functionp 'json-parse-string)))
-  ;; dont activate tide on vue files
-  :hook ((typescript-mode js2-mode) . (lambda()
-                                        (unless (or vue-mode-p large-buffer-p) (setup-tide-mode))))
-  :config
-  (add-hook 'tide-mode-hook
-            (lambda()
-              (if (file-is-react)
-                  ; Run eslint after tsx-tide, run jsx-tide after eslint
-                  (progn
-                    (flycheck-add-next-checker 'tsx-tide 'javascript-eslint 'append)
-                    (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append))
-                ; if not react, run javascript-tide after eslint
-                (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-                ;; enable eslint in ts files
-                ;; https://github.com/ananthakumaran/tide/issues/308
-                (flycheck-add-next-checker 'typescript-tide 'javascript-eslint)
-            )))
-
-  ;; We currently do not eslint on ts files
-  ;; https://github.com/ananthakumaran/tide/issues/308
-  ;; (flycheck-add-next-checker 'typescript-tide '(warning . javascript-eslint))
-  ;; Dont interfere with LSP keybindings for vue files with ts scripts
-  (unless vue-mode-p
-    (bind-key "C-c C-d" 'tide-documentation-at-point tide-mode-map)
-    (bind-key "C-c C-f" 'tide-fix tide-mode-map)))
-
 (use-package web-mode
   :ensure t
   :preface
@@ -906,7 +836,6 @@ lockfiles or large files."
            (web-mode-enable-current-element-highlight t)
            (web-mode-markup-indent-offset 2))
   :mode (("\\.html?\\'" . web-mode)))
-
 
 ;;;;;;;;;;;;;;;;;;
 ;; Misc Testing ;;
