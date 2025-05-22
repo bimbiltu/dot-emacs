@@ -488,7 +488,7 @@ lockfiles or large files."
 (use-package flycheck
   :ensure t
   :commands (flycheck-mode global-flycheck-mode flycheck-next-error flycheck-previous-error flycheck-add-next-checker)
-  :defer 2
+  ;; :defer 2
   :custom
   (flycheck-temp-prefix ".flycheck")
   (flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
@@ -576,7 +576,7 @@ lockfiles or large files."
   (company-dabbrev-downcase nil)
   (company-tooltip-align-annotations t)
   (company-show-numbers t)
-  (company-idle-delay 0.10)
+  (company-idle-delay 0.0) ;; recommended by lsp https://emacs-lsp.github.io/lsp-mode/page/main-features
   (company-minimum-prefix-length 1)
   (company-tooltip-flip-when-above t)
   (company-selection-wrap-around t)
@@ -626,7 +626,7 @@ lockfiles or large files."
   :custom
   (lsp-keymap-prefix "C-c l")
   (lsp-enable-dap-auto-configure nil)
-  (lsp-idle-delay 0.25)
+  (lsp-idle-delay 0.35)
   (lsp-vetur-use-workspace-dependencies t)
   (lsp-headerline-breadcrumb-enable nil)
   ;; creates file watchers on every directory in every project..
