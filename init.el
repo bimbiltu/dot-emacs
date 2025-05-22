@@ -418,13 +418,16 @@ lockfiles or large files."
 (use-package sqlite3
   :ensure t)
 
+(use-package browse-at-remote
+  :ensure t
+  :bind ("C-c B" . browse-at-remote))
+
 (use-package forge
   :ensure t
   :after magit
   :custom
   (forge-topic-list-limit (quote (20 . 0)))
   (forge-pull-notifications nil)
-  :bind ("C-c B" . browse-at-remote)
   :config
   ;; '(git hostname, api endpont, id typically hostname, repo class ex forge-github-repository)
   (when (boundp 'private-forge-alist) (add-to-list 'forge-alist private-forge-alist)))
