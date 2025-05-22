@@ -583,7 +583,8 @@ lockfiles or large files."
   :hook ((tern-mode typescript-mode) . company-mode))
 
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :hook (lsp-mode . yas-minor-mode))
 
 ;;; Language servers
 (use-package lsp-mode
