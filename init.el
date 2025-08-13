@@ -586,6 +586,16 @@ lockfiles or large files."
   :ensure t
   :hook (lsp-mode . yas-minor-mode))
 
+(use-package vterm
+    :ensure t)
+
+(use-package aidermacs
+  :ensure t
+  :custom
+  (aidermacs-show-diff-after-change nil)
+  (aidermacs-backend 'vterm)
+  :bind (("C-c a" . aidermacs-transient-menu)))
+
 ;;; Language servers
 (use-package lsp-mode
   :ensure t
