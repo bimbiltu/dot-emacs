@@ -95,11 +95,7 @@
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
   :ensure t
-  :custom
-  (exec-path-from-shell-arguments '("-l"))
   :config
-  (add-to-list 'exec-path-from-shell-variables "GOPATH")
-  (add-to-list 'exec-path-from-shell-variables "GOPRIVATE")
   (exec-path-from-shell-initialize))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
