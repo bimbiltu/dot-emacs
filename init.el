@@ -648,6 +648,9 @@ lockfiles or large files."
   (lsp-clients-typescript-prefer-use-project-ts-server nil)
   (lsp-clients-typescript-max-ts-server-memory 8192)
 
+  (lsp-copilot-enabled nil)
+  (lsp-disabled-clients '(rubocop-ls sorbet-ls))
+
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
   ;; which-key integration doesnt work 100% in vue files: https://github.com/emacs-lsp/lsp-mode/issues/1598
@@ -865,7 +868,8 @@ lockfiles or large files."
  '(fill-column 120)
  '(indent-tabs-mode nil)
  '(mmm-submode-decoration-level 0)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(yasnippet yaml-mode ws-butler which-key wgrep web-mode vue-mode sqlite3 scss-mode protobuf-mode prettier-js lsp-ui keyfreq json-mode js2-mode iedit hl-todo go-mode git-timemachine forge flycheck-popup-tip exec-path-from-shell doom-themes diminish dap-mode counsel-projectile company browse-at-remote ace-jump-mode))
  '(safe-local-variable-values
    '((eval remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff)
      (eval remove-hook 'server-switch-hook 'magit-commit-diff)
