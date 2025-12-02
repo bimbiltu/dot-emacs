@@ -62,6 +62,7 @@
   :ensure t)
 
 (add-to-list 'load-path (concat user-emacs-directory (file-name-as-directory "elisp")))
+(require 'copy-tdd-cmd)
 (let ((secrets-file (concat user-emacs-directory "secrets.el")))
   (when (file-readable-p secrets-file) (load secrets-file nil t)))
 
