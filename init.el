@@ -649,8 +649,13 @@ lockfiles or large files."
   (lsp-clients-typescript-prefer-use-project-ts-server nil)
   (lsp-clients-typescript-max-ts-server-memory 8192)
 
+  (lsp-rubocop-use-bundler t)
+  (lsp-sorbet-use-bundler t)
+  (lsp-sorbet-as-add-on t)
+
   (lsp-copilot-enabled nil)
-  (lsp-disabled-clients '(rubocop-ls sorbet-ls))
+  (lsp-disabled-clients '(ruby-ls rubocop-ls)) ; try ruby-lsp instead of solargraph
+  ;(lsp-disabled-clients '(rubocop-ls sorbet-ls))
 
   :config
   (bind-key "C-c C-f" 'lsp-execute-code-action lsp-mode-map)
