@@ -1,4 +1,5 @@
 *
-!elisp
+!elisp/
+!elisp/**
 !init.el
 !.gitignore
